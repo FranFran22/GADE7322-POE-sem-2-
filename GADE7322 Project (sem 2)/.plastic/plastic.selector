@@ -1,0 +1,4 @@
+repository "GADE7322 Project (sem 2)@Countess127@cloud"
+  path "/"
+    br "/main"
+    co "/main"
