@@ -43,14 +43,20 @@ public class GameManager : MonoBehaviour
     }
 
 
+    public void Timer()
+    {
+        //needs to run during gamem time --> stops when game is paused
+    }
+
+
     #region ENEMIES
     private void GenerateSpawnPoints()
     {
         for (int i = 0; i < 3; i++)
         {
             GameObject spawn = new GameObject();
-
             spawn.transform.position = GenerateCoords();
+            enemySpawnPoints[i] = spawn;
         }
     }
 
@@ -79,5 +85,17 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(3f); //spawn ever 3 seconds
         }
     }
+    #endregion
+
+    #region DEFENDERS
+    private void SpawnDefender()
+    {
+        // when the defender icon is clicked --> defender is placed
+        // random spawn location near the tower
+    }
+
+    
+
+
     #endregion
 }
