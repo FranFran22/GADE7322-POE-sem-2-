@@ -24,7 +24,7 @@ public class TerrainGenerator : MonoBehaviour
 
     private float maxValue = 1f;
     private float minValue = 0.1f;
-    private static int size = 100;
+    private static int size = 50;
 
     private float[,] noiseArray = new float[size, size];
     private Vector3[] newVertices = new Vector3[size * size];
@@ -55,6 +55,7 @@ public class TerrainGenerator : MonoBehaviour
             for (int j = 0; j < size; j++)
             {
                 noiseArray[i, j] = Noise();
+                Debug.Log(noiseArray[i, j]);
             }
         }
     }
@@ -89,12 +90,18 @@ public class TerrainGenerator : MonoBehaviour
     {
         index = 0;
 
-        for (int i = 0; i < size; i++)
+        for (int k = 0; k < size; k++)
         {
-            for (int j = 0; j < size; j++)
+            for (int h = 0; h < size; h++)
             {
-                newVertices[index++] = new Vector3(i, noiseArray[i, j] * scalingFactor, j);
-                newUV[index++] = new Vector2(i / (size - 1), j / (size - 1));
+                //Debug.Log("k: " + k);
+                //Debug.Log("h: " + h);
+                //Debug.Log(index);
+
+                newVertices[index] = new Vector3(k, noiseArray[k, h] * scalingFactor, h);
+                newUV[index] = new Vector2(k / (size - 1), h / (size - 1));
+
+                index++;
             }
         }
 
