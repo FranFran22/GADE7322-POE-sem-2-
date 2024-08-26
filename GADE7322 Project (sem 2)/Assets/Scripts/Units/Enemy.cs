@@ -10,11 +10,12 @@ public class Enemy : Unit
         damage = 50;
         speed = 15f;
         spawn = spn;
-        prefab = pref;
+        prefab = InstantiatePrefab(pref, spn); ;
     }
 
-    public override void InstantiatePrefab()
+    public override GameObject InstantiatePrefab(GameObject prefab, GameObject spawn)
     {
-
+        GameObject obj = GameObject.Instantiate(prefab, spawn.transform);
+        return obj;
     }
 }

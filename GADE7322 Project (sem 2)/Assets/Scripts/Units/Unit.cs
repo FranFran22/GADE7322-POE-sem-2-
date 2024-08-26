@@ -20,6 +20,6 @@ public abstract class Unit
         this.prefab = prefab;
     }
 
-    public abstract void InstantiatePrefab();
+    public abstract GameObject InstantiatePrefab(GameObject obj1, GameObject obj2);
 
 }

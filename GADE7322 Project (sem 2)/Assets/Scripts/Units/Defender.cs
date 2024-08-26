@@ -10,6 +10,12 @@ public class Defender : Unit
         damage = 60;
         speed = 10f;
         spawn = spn;
-        prefab = obj;
+        prefab = InstantiatePrefab(obj, spn); ;
+    }
+
+    public override GameObject InstantiatePrefab(GameObject prefab, GameObject spawn)
+    {
+        GameObject obj = GameObject.Instantiate(prefab, spawn.transform);
+        return obj;
     }
 }

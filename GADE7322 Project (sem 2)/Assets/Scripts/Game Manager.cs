@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
     private Vector3[] vertices;
     private int numOfEnemies;
 
+    private int timer; //game timer (wip)
+
 
     void Start()
     {
@@ -30,6 +32,7 @@ public class GameManager : MonoBehaviour
 
         //enemy spawning
         GenerateSpawnPoints();
+        StartCoroutine(eSpawner());
 
     }
 
@@ -60,13 +63,21 @@ public class GameManager : MonoBehaviour
     }
 
 
-    private void SpawnEnemies()
+    private void SpawnEnemy()
     {
         float x = Random.Range(0, enemySpawnPoints.Length - 1);
 
-
         Enemy enemy = new Enemy(enemyPrefab, enemySpawnPoints[(int) x]);
 
+    }
+
+    private IEnumerator eSpawner()
+    {
+        while (timer < 30) //only spawn after 30 seconds
+        {
+            SpawnEnemy();
+            yield return new WaitForSeconds(3f); //spawn ever 3 seconds
+        }
     }
     #endregion
 }

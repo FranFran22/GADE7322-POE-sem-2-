@@ -5,15 +5,21 @@ using UnityEngine;
 public class Tower : Unit
 {
     private float range { get; set; }
-    [SerializeField]
-    private GameObject spawnPoint;
     
 
-    public Tower()
+    public Tower(GameObject pref, GameObject spn)
     {
         health = 500;
         damage = 35;
         speed = 0f;
-        spawn = spawnPoint;
+        spawn = spn;
+        prefab = InstantiatePrefab(pref, spn);
+        this.range = range; 
+    }
+
+    public override GameObject InstantiatePrefab(GameObject prefab, GameObject spawn)
+    {
+        GameObject obj = GameObject.Instantiate(prefab, spawn.transform);
+        return obj;
     }
 }
