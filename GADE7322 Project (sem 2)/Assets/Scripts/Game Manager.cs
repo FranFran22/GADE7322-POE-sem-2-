@@ -8,55 +8,65 @@ public class GameManager : MonoBehaviour
     private GameObject[] enemySpawnPoints;
     [SerializeField]
     private GameObject enemyTarget;
-    [SerializeField]
-    private GameObject enemyPrefab;
+
+    public static GameObject enemyPrefab;
+    public static GameObject defenderPrefab;
 
     private int count;
     private int speed;
 
-    // Start is called before the first frame update
+    private int terrainSize = 100;
+    private Vector3[] vertices;
+    private int numOfEnemies;
+
+
     void Start()
     {
-        GetComponent<Rigidbody>();
-        count = 0;
+        Vector3[] temp = GetComponent<TerrainGenerator>().newVertices;
+        vertices = temp;
 
-        Coroutine();
+        GetComponent<Enemy>();
+        GetComponent<Defender>();
+
+        //enemy spawning
+        GenerateSpawnPoints();
+
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         
     }
 
 
-    private void SpawnEnemies()
+    #region ENEMIES
+    private void GenerateSpawnPoints()
     {
-        GameObject obj = RandomPoint(enemySpawnPoints);
-        Instantiate(enemyPrefab, obj.transform.position, Quaternion.identity);
-
-        Debug.Log("enemy spawned");
- 
-        Rigidbody rb = obj.GetComponent<Rigidbody>();
-        rb.MovePosition(enemyTarget.transform.position * speed);
-    }
-
-    IEnumerator Coroutine()
-    {
-        while (count < 11)
+        for (int i = 0; i < 3; i++)
         {
-            yield return new WaitForSeconds(5);
-            SpawnEnemies();
+            GameObject spawn = new GameObject();
 
-            count++;
-
-            Debug.Log("enemy +1");
+            spawn.transform.position = GenerateCoords();
         }
     }
 
-    private GameObject RandomPoint(GameObject[] array)
+    private Vector3 GenerateCoords()
     {
-        int i = UnityEngine.Random.Range(0, array.Length);
-        return array[i];
+        float x = Random.Range(0, vertices.Length / 2); //choose a random vertex from the array
+        Vector3 val = vertices[(int) x];
+
+        return val;
     }
+
+
+    private void SpawnEnemies()
+    {
+        float x = Random.Range(0, enemySpawnPoints.Length - 1);
+
+
+        Enemy enemy = new Enemy(enemyPrefab, enemySpawnPoints[(int) x]);
+
+    }
+    #endregion
 }

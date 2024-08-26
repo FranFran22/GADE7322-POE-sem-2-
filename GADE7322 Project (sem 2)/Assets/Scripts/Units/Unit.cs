@@ -8,6 +8,7 @@ public abstract class Unit
     public int damage { get; set; }
     public float speed { get; set; }
     public GameObject spawn { get; set; }
+    public GameObject prefab { get; set; }
 
 
     public Unit()
@@ -16,5 +17,9 @@ public abstract class Unit
         this.damage = damage;
         this.speed = speed;
         this.spawn = spawn;
+        this.prefab = prefab;
     }
+
+    public abstract void InstantiatePrefab();
+
 }

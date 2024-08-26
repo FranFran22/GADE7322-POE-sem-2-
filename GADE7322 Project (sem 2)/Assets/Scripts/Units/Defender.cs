@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class Defender : Unit
 {
-    [SerializeField]
-    private GameObject spawnPoint;
-
-    public Defender()
+    public Defender(GameObject obj, GameObject spn)
     {
         health = 100;
         damage = 60;
         speed = 10f;
-        spawn = spawnPoint;
+        spawn = spn;
+        prefab = obj;
     }
 }

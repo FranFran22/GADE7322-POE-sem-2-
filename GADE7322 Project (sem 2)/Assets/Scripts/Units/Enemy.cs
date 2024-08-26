@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class Enemy : Unit
 {
-    public Enemy()
+    public Enemy(GameObject pref, GameObject spn)
     {
         health = 100;
         damage = 50;
         speed = 15f;
-        spawn = null;
+        spawn = spn;
+        prefab = pref;
+    }
+
+    public override void InstantiatePrefab()
+    {
+
     }
 }

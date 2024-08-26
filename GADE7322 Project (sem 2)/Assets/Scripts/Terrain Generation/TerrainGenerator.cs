@@ -27,7 +27,7 @@ public class TerrainGenerator : MonoBehaviour
     private static int size = 50;
 
     private float[,] noiseArray = new float[size, size];
-    private Vector3[] newVertices = new Vector3[size * size];
+    public Vector3[] newVertices = new Vector3[size * size];
     private Vector2[] newUV = new Vector2[size * size];
     private int[] newTriangles = new int[(size - 1) * (size - 1) * 2 * 3];
     private int index;
