@@ -1,8 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
+
+
+[System.Serializable]
+public class TerrainType
+{
+    public string name;
+    public float height;
+    public Color colour;
+}
 
 public class TerrainGenerator : MonoBehaviour
 {
@@ -22,22 +32,33 @@ public class TerrainGenerator : MonoBehaviour
     // heightmap source is a function
 
 
-    private float maxValue = 1f;
-    private float minValue = 0.1f;
-    private static int size = 50;
+    private static int size = 11;
 
     private float[,] noiseArray = new float[size, size];
-    private Vector3[] newVertices = new Vector3[size * size];
-    private Vector2[] newUV = new Vector2[size * size];
-    private int[] newTriangles = new int[(size - 1) * (size - 1) * 2 * 3];
-    private int index;
-    private int scalingFactor = 10;
+    public Vector3[] newVertices = new Vector3[size * size];
+    private int scalingFactor = 3;
+    private float heightMultiplier = 3;
 
+    private MeshRenderer mRenderer;
+    private MeshFilter mFilter;
+    private MeshCollider mCollider;
+
+    [SerializeField]
+    private TerrainType[] terrainTypes;
+
+    [SerializeField]
+    private Wave[] waves;
+
+    [SerializeField]
+    private AnimationCurve heightCurve;
 
 
     void Start()
     {
-        NoiseGeneration();
+        mFilter = GetComponent<MeshFilter>();
+        mCollider = GetComponent<MeshCollider>();
+        mRenderer = GetComponent<MeshRenderer>();
+
         GenerateMesh();
     }
 
@@ -48,79 +69,116 @@ public class TerrainGenerator : MonoBehaviour
     }
 
 
-    private void NoiseGeneration()
+    private float[,] NoiseGeneration(float offsetX, float offsetZ, Wave[] waves)
     {
+        float[,] map = new float[size, size];
+
+        for (int h = 0; h < size; h++)
+        {
+            for (int w = 0; w < size; w++)
+            {
+                float sampleX = (w+ offsetX) / scalingFactor;
+                float sampleZ = (h + offsetZ) / scalingFactor;
+
+                float noise = 0f;
+                float normalisation = 0f;
+
+                foreach(Wave wave in waves) //generates noise value for each wave
+                {
+                    noise+= wave.amplitude * Mathf.PerlinNoise(sampleX * wave.frequency + wave.seed, sampleZ * wave.frequency + wave.seed);
+                    normalisation += wave.amplitude;
+                }
+
+                noise /= normalisation; //normalise the noise value to be between 0 and 1 (for heightmap)
+
+                map[h, w] = noise;
+                Debug.Log(noise);
+            }
+        }
+
+        return map;
+    }
+
+
+    private void GenerateMesh() //Tile generation
+    {
+        newVertices = mFilter.mesh.vertices; //redundant ??
+
+        //offsets for tile edges
+        float offsetX = -gameObject.transform.position.x;
+        float offsetZ = -gameObject.transform.position.z;
+
+        //heightmap generation (Perlin noise)
+        noiseArray = NoiseGeneration(offsetX, offsetZ, waves);
+
+        Texture2D tileTexture = BuildTexture(noiseArray);
+        mRenderer.material.mainTexture = tileTexture;
+
+        //update the vertices according to the noise map
+        UpdateVertices(noiseArray);
+
+    }
+
+    private void UpdateVertices(float[,] heightmap)
+    {
+        Vector3[] vertices = mFilter.mesh.vertices;
+
+        int index = 0;
+
         for (int i = 0; i < size; i++)
         {
             for (int j = 0; j < size; j++)
             {
-                noiseArray[i, j] = Noise();
-                Debug.Log(noiseArray[i, j]);
-            }
-        }
-    }
-
-
-    private float Noise()
-    {
-        float frequency = Random.Range(0, 9);
-        frequency = frequency / 10;
-
-        float noiseVal = Mathf.PerlinNoise(maxValue * frequency, minValue * frequency);
-
-        return noiseVal;
-    }
-
-
-    private void GenerateMesh()
-    {
-        Mesh terrain = new Mesh();
-        MeshFilter mf = GetComponent<MeshFilter>();
-        mf.mesh = terrain;
-
-        Generate();
-
-        terrain.vertices = newVertices;
-        terrain.uv = newUV;
-        terrain.triangles = newTriangles;
-    }
-
-
-    private void Generate()
-    {
-        index = 0;
-
-        for (int k = 0; k < size; k++)
-        {
-            for (int h = 0; h < size; h++)
-            {
-                //Debug.Log("k: " + k);
-                //Debug.Log("h: " + h);
-                //Debug.Log(index);
-
-                newVertices[index] = new Vector3(k, noiseArray[k, h] * scalingFactor, h);
-                newUV[index] = new Vector2(k / (size - 1), h / (size - 1));
+                float height = heightmap[i, j];
+                Vector3 vertex = vertices[index];
+                vertices[index] = new Vector3(vertex.x, heightCurve.Evaluate(height) * heightMultiplier, vertex.z); //changes the y value 
 
                 index++;
             }
         }
 
-        index = 0;
+        //update the vertices & mesh
+        mFilter.mesh.vertices = vertices;
+        mFilter.mesh.RecalculateBounds();
+        mFilter.mesh.RecalculateNormals();
+        mCollider.sharedMesh = mFilter.mesh;
 
-        for (int x = 0; x < size - 1; x++)
+    }
+
+    private Texture2D BuildTexture(float[,] map)
+    {
+        int depth = size;
+        int width = size;
+
+        Color[] colourMap = new Color[depth * width];
+        for (int z = 0; z < depth; z++)
         {
-            for (int y = 0; y < size - 1; y++)
+            for (int x = 0; x < width; x ++)
             {
-                // triangle #1
-                newTriangles[index++] = x + y * size;
-                newTriangles[index++] = x + 1 + y * size;
-                newTriangles[index++] = x + 1 + (y + 1) * size;
-
-                // triangle #2
-                newTriangles[index++] = x + y * size;
-                newTriangles[index++] = x + 1 + (y + 1) * size;
-                newTriangles[index++] = x + (y + 1) * size;
+                int colourIndex = z * width + x;
+                float height = map[z, x];
+                TerrainType terrainType = ChooseTerrainType(height);
+                colourMap[colourIndex] = terrainType.colour;
             }
         }
+
+        Texture2D tileTexture = new Texture2D(width, depth);
+        tileTexture.wrapMode = TextureWrapMode.Clamp;
+        tileTexture.SetPixels(colourMap);
+        tileTexture.Apply();
+
+        return tileTexture;
     }
+
+    private TerrainType ChooseTerrainType(float height)
+    {
+        foreach(TerrainType terrainType in terrainTypes)
+        {
+            if (height < terrainType.height)
+                return terrainType;
+        }
+
+        return terrainTypes[terrainTypes.Length - 1];
+    }
+
 }

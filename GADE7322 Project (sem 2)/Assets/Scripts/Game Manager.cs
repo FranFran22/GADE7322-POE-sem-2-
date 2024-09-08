@@ -8,55 +8,94 @@ public class GameManager : MonoBehaviour
     private GameObject[] enemySpawnPoints;
     [SerializeField]
     private GameObject enemyTarget;
-    [SerializeField]
-    private GameObject enemyPrefab;
+
+    public static GameObject enemyPrefab;
+    public static GameObject defenderPrefab;
 
     private int count;
     private int speed;
 
-    // Start is called before the first frame update
+    private int terrainSize = 100;
+    private Vector3[] vertices;
+    private int numOfEnemies;
+
+    private int timer; //game timer (wip)
+
+
     void Start()
     {
-        GetComponent<Rigidbody>();
-        count = 0;
+        //Vector3[] temp = GetComponent<TerrainGenerator>().newVertices;
+        //vertices = temp;
 
-        Coroutine();
+        //GetComponent<Enemy>();
+        //GetComponent<Defender>();
+
+        //enemy spawning
+        GenerateSpawnPoints();
+        StartCoroutine(eSpawner());
+
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         
     }
 
 
-    private void SpawnEnemies()
+    public void Timer()
     {
-        GameObject obj = RandomPoint(enemySpawnPoints);
-        Instantiate(enemyPrefab, obj.transform.position, Quaternion.identity);
-
-        Debug.Log("enemy spawned");
- 
-        Rigidbody rb = obj.GetComponent<Rigidbody>();
-        rb.MovePosition(enemyTarget.transform.position * speed);
+        //needs to run during gamem time --> stops when game is paused
     }
 
-    IEnumerator Coroutine()
+
+    #region ENEMIES
+    private void GenerateSpawnPoints()
     {
-        while (count < 11)
+        for (int i = 0; i < 3; i++)
         {
-            yield return new WaitForSeconds(5);
-            SpawnEnemies();
-
-            count++;
-
-            Debug.Log("enemy +1");
+            GameObject spawn = new GameObject();
+            spawn.transform.position = GenerateCoords();
+            enemySpawnPoints[i] = spawn;
         }
     }
 
-    private GameObject RandomPoint(GameObject[] array)
+    private Vector3 GenerateCoords()
     {
-        int i = UnityEngine.Random.Range(0, array.Length);
-        return array[i];
+        float x = Random.Range(0, vertices.Length / 2); //choose a random vertex from the array
+        Vector3 val = vertices[(int) x];
+
+        return val;
     }
+
+
+    private void SpawnEnemy()
+    {
+        float x = Random.Range(0, enemySpawnPoints.Length - 1);
+
+        Enemy enemy = new Enemy(enemyPrefab, enemySpawnPoints[(int) x]);
+
+    }
+
+    private IEnumerator eSpawner()
+    {
+        while (timer < 30) //only spawn after 30 seconds
+        {
+            SpawnEnemy();
+            yield return new WaitForSeconds(3f); //spawn ever 3 seconds
+        }
+    }
+    #endregion
+
+    #region DEFENDERS
+    private void SpawnDefender()
+    {
+        // when the defender icon is clicked --> defender is placed
+        // random spawn location near the tower
+    }
+
+    
+
+
+    #endregion
 }
