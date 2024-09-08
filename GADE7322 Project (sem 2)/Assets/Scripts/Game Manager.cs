@@ -24,11 +24,11 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        Vector3[] temp = GetComponent<TerrainGenerator>().newVertices;
-        vertices = temp;
+        //Vector3[] temp = GetComponent<TerrainGenerator>().newVertices;
+        //vertices = temp;
 
-        GetComponent<Enemy>();
-        GetComponent<Defender>();
+        //GetComponent<Enemy>();
+        //GetComponent<Defender>();
 
         //enemy spawning
         GenerateSpawnPoints();
