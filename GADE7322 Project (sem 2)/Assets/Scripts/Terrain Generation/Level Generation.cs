@@ -13,9 +13,16 @@ public class LevelGeneration : MonoBehaviour
     [SerializeField]
     private GameObject tilePrefab;
 
+    [SerializeField]
+    private int seeds;
+
+    public static Wave[] waveSeeds;
+    private float[] frequencies = new float[] { 0.25f, 0.5f, 1f };
+
 
     void Start()
     {
+        waveSeeds = GenerateSeeds();
         GenerateLevel();
     }
 
@@ -34,4 +41,32 @@ public class LevelGeneration : MonoBehaviour
             }
         }
     }
+
+    private Wave[] GenerateSeeds()
+    {
+        int seed = 1000;
+
+        Wave[] gameSeeds = new Wave[seeds];
+
+        for (int i = 0; i < gameSeeds.Length; i++)
+        {
+            gameSeeds[i] = new Wave();
+
+            //random frequency
+            float R = Random.Range(0, 3);
+            gameSeeds[i].frequency = frequencies[(int)R];
+
+            //random amplitude
+            float r = Random.Range(1, 6);
+            gameSeeds[i].amplitude = r;
+
+            gameSeeds[i].seed = seed;
+
+            //Debug.Log(gameSeeds[i].seed);
+            seed++;
+        }
+
+        return gameSeeds;
+    }
+
 }

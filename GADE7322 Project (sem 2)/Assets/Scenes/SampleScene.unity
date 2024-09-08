@@ -185,6 +185,7 @@ MonoBehaviour:
   width: 3
   depth: 3
   tilePrefab: {fileID: 6784540716964894963, guid: 0ed6483c7c5c8d34ab41285951a85687, type: 3}
+  seeds: 4
 --- !u!1 &65898364
 GameObject:
   m_ObjectHideFlags: 0

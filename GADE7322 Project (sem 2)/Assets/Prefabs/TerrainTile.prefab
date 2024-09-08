@@ -241,30 +241,17 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
-  mRenderer: {fileID: 3042525460437143337}
-  mFilter: {fileID: 0}
-  mCollider: {fileID: 0}
   terrainTypes:
-  - name: Water
+  - name: Grass (flat)
     height: 0.41
-    colour: {r: 0.2, g: 0.40008566, b: 0.40392157, a: 0}
-  - name: Grass
-    height: 0.7
-    colour: {r: 0.20000002, g: 0.4039216, b: 0.25882354, a: 0}
+    colour: {r: 0.19215688, g: 0.38823533, b: 0.24705884, a: 1}
+  - name: Grass (hills)
+    height: 0.6
+    colour: {r: 0.26673195, g: 0.509434, b: 0.3367422, a: 0}
   - name: Mountain
     height: 1
-    colour: {r: 0.3490566, g: 0.2741926, b: 0.18934675, a: 0}
-  heightMultiplier: 0
-  waves:
-  - seed: 2043
-    frequency: 1
-    amplitude: 1
-  - seed: 3024
-    frequency: 0.5
-    amplitude: 2
-  - seed: 6531
-    frequency: 0.25
-    amplitude: 4
+    colour: {r: 0.4433962, g: 0.37264258, b: 0.29071733, a: 0}
+  waves: []
   heightCurve:
     serializedVersion: 2
     m_Curve:

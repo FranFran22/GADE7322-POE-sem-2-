@@ -59,6 +59,9 @@ public class TerrainGenerator : MonoBehaviour
         mCollider = GetComponent<MeshCollider>();
         mRenderer = GetComponent<MeshRenderer>();
 
+        GetComponent<LevelGeneration>();
+        waves = LevelGeneration.waveSeeds;
+
         GenerateMesh();
     }
 
@@ -180,5 +183,4 @@ public class TerrainGenerator : MonoBehaviour
 
         return terrainTypes[terrainTypes.Length - 1];
     }
-
 }
