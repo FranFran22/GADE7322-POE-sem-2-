@@ -155,6 +155,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemySpawnPoints: []
   enemyTarget: {fileID: 648008762}
+  numEnemySpawns: 3
 --- !u!4 &53922841
 Transform:
   m_ObjectHideFlags: 0

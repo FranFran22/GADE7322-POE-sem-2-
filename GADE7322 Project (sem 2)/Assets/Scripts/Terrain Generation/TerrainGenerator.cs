@@ -35,7 +35,7 @@ public class TerrainGenerator : MonoBehaviour
     private static int size = 11;
 
     private float[,] noiseArray = new float[size, size];
-    public Vector3[] newVertices = new Vector3[size * size];
+    public static Vector3[] newVertices = new Vector3[size * size];
     private int scalingFactor = 3;
     private float heightMultiplier = 3;
 
@@ -95,7 +95,7 @@ public class TerrainGenerator : MonoBehaviour
                 noise /= normalisation; //normalise the noise value to be between 0 and 1 (for heightmap)
 
                 map[h, w] = noise;
-                Debug.Log(noise);
+                //Debug.Log(noise);
             }
         }
 
