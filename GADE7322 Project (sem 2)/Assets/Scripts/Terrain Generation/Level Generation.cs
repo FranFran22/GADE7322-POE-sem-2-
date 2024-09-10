@@ -50,7 +50,6 @@ public class LevelGeneration : MonoBehaviour
             }
         }
 
-        vertices = GetVertices(tiles);
         GenerateSpawnPoints();
     }
 
@@ -88,45 +87,46 @@ public class LevelGeneration : MonoBehaviour
 
         foreach (GameObject spawn in enemySpawns)
         {
-            enemySpawns[i] = Instantiate(obj, GeneratePosition(vertices), Quaternion.identity);
+            enemySpawns[i] = Instantiate(obj, GeneratePosition(), Quaternion.identity);
             enemySpawns[i].name = "Spawn";
             i++;
         }
     }
 
-    private Vector3 GeneratePosition(Vector3[] vertices)
+    private Vector3 GeneratePosition()
     {
-        //generate positions for spawn points
-
-        return Vector3.zero;
-    }
-
-    private Vector3[] GetVertices(GameObject[] array)
-    {
-        Vector3[] vertices = new Vector3[array.Length];
-        Vector3[] temp;
-
-        foreach (GameObject t in array)
+        Vector3 posVector;
+        float rndmNum;
+        float randm = Random.Range(0, 4);
+        
+        switch (randm)
         {
-            MeshFilter meshFilter = t.GetComponent<MeshFilter>();
+            case 0: //left edge
+                rndmNum = Random.Range(-5, 26);
+                posVector = new Vector3(rndmNum, 0.1f, 25);
+                break;
 
-            if (vertices == null)
-            {
-                vertices = meshFilter.mesh.vertices;
-            }
+            case 1: // top edge
+                rndmNum = Random.Range(-5, 26);
+                posVector = new Vector3(25, 0.1f, rndmNum);
+                break;
 
-            else if (vertices != null)
-            {
-                temp = meshFilter.mesh.vertices;
-                vertices = vertices.Concat(temp).ToArray();
+            case 2: // right edge
+                rndmNum = Random.Range(-5, 26);
+                posVector = new Vector3(rndmNum, 0.1f, -5);
+                break;
 
-                foreach (Vector3 v in temp)
-                    Debug.Log(v);
-            }
+            case 3: // bottom edge
+                rndmNum = Random.Range(-5, 26);
+                posVector = new Vector3(-5, 0.1f, rndmNum);
+                break;
+
+            default:
+                posVector = Vector3.zero;
+                break;
         }
-        
-        
-        return vertices;
+
+        return posVector;
     }
 
 }
