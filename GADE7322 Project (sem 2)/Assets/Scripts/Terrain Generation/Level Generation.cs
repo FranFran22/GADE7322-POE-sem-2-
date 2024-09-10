@@ -80,6 +80,7 @@ public class LevelGeneration : MonoBehaviour
         return gameSeeds;
     }
 
+    //Enemy Spawning
     private void GenerateSpawnPoints() //generate enemy spawns
     {
         int i = 0;
@@ -89,6 +90,7 @@ public class LevelGeneration : MonoBehaviour
         {
             enemySpawns[i] = Instantiate(obj, GeneratePosition(), Quaternion.identity);
             enemySpawns[i].name = "Spawn";
+            enemySpawns[i].transform.tag = "Enemy Spawn";
             i++;
         }
     }
