@@ -358,6 +358,7 @@
 "Assets/Scripts/Terrain Generation/Level Generation.cs"
 "Assets/Scripts/Terrain Generation/TerrainGenerator.cs"
 "Assets/Scripts/Terrain Generation/Wave.cs"
+"Assets/Scripts/Unit buttons.cs"
 "Assets/Scripts/Units/Defender.cs"
 "Assets/Scripts/Units/Enemy.cs"
 "Assets/Scripts/Units/EnemyPathing.cs"

@@ -20,9 +20,8 @@ public class LevelGeneration : MonoBehaviour
     public static Wave[] waveSeeds;
     private float[] frequencies = new float[] { 0.25f, 0.5f, 1f };
     private static int numOfSpawns = 3;
-    private GameObject[] enemySpawns = new GameObject[numOfSpawns];
+    public static GameObject[] enemySpawns = new GameObject[numOfSpawns];
     private GameObject[] tiles = new GameObject[9]; //change manually !!
-    private Vector3[] vertices;
 
 
     void Start()

@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Tile
   - Enemy Spawn
+  - Tower
+  - Enemy
+  - Defender
   layers:
   - Default
   - TransparentFX
