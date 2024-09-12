@@ -4,6 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using TMPro;
+
+// Game only starts when the tower is placed
+// Player will have 30 seconds to place the tower, otherwise it will be randomly spawned
 
 public class GameManager : MonoBehaviour
 {
@@ -11,6 +15,7 @@ public class GameManager : MonoBehaviour
     private GameObject[] defenderSpawnPoints = new GameObject[3];
     public GameObject Tower;
 
+    #region GAME OBJECTS
     [SerializeField]
     private GameObject enemyTarget;
 
@@ -22,16 +27,35 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private GameObject towerPrefab;
+    #endregion
 
     private enum UnitType { Tower, Enemy, Defender };
     private UnitType unitType;
 
-    private int timer; //game timer (wip)
     private bool towerPlaced;
+    private float timer;
+    private float timeDuration = 90;
 
+    #region TIMER OBJECTS
+    [SerializeField]
+    private TextMeshProUGUI minute1;
+
+    [SerializeField]
+    private TextMeshProUGUI minute2;
+
+    [SerializeField]
+    private TextMeshProUGUI seperator;
+
+    [SerializeField]
+    private TextMeshProUGUI second1;
+
+    [SerializeField]
+    private TextMeshProUGUI second2;
+    #endregion
 
     void Start()
     {
+        ResetTimer();
         towerPlaced = false;
         GetComponent<LevelGeneration>();
         enemySpawnPoints = LevelGeneration.enemySpawns;
@@ -44,13 +68,25 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        
+        timer -= Time.deltaTime; //countdown
+        UpdateTimerDisplay(timer);
     }
 
 
-    public void Timer()
+    private void UpdateTimerDisplay(float time) 
     {
-        //needs to run during game time --> stops when game is paused
+        float minutes = Mathf.FloorToInt(time / 60);
+        float seconds = Mathf.FloorToInt(time % 60);
+
+        string currentTime = string.Format("{00:00}{1:00}", minutes, seconds);
+        minute1.text = currentTime[0].ToString();
+        minute2.text = currentTime[1].ToString();
+        second1.text = currentTime[2].ToString();
+        second2.text = currentTime[3].ToString();
+    }
+    private void ResetTimer()
+    {
+        timer = timeDuration;
     }
 
     private void SpawnUnit(UnitType type, Vector3 value)
