@@ -53,6 +53,11 @@ public class GameManager : MonoBehaviour
     private TextMeshProUGUI second2;
     #endregion
 
+    void Awake()
+    {
+        
+    }
+
     void Start()
     {
         ResetTimer();
@@ -70,6 +75,13 @@ public class GameManager : MonoBehaviour
     {
         timer -= Time.deltaTime; //countdown
         UpdateTimerDisplay(timer);
+
+        //need to put tower-check code here
+        if (towerPlaced == true)
+        {
+            CalculateDefenderSpawn();
+            StartCoroutine(SpawnEnemy());
+        }
     }
 
 
