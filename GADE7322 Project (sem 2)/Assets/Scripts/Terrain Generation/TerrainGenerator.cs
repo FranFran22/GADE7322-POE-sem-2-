@@ -16,10 +16,6 @@ public class TerrainType
 
 public class TerrainGenerator : MonoBehaviour
 {
-    // REFERENCES
-    // https://discussions.unity.com/t/mesh-generation-out-of-array/682340
-    // https://docs.unity3d.com/ScriptReference/Mesh.html
-
     // PROCEDURE
     // heightmap [done]
     // create mesh --> using heightmap
@@ -38,7 +34,7 @@ public class TerrainGenerator : MonoBehaviour
     public static Vector3[] newVertices = new Vector3[size * size];
     private int scalingFactor = 3;
     private float heightMultiplier = 3;
-
+    public static GameObject[] vertexObjects;
     private MeshRenderer mRenderer;
     private MeshFilter mFilter;
     private MeshCollider mCollider;
@@ -63,6 +59,7 @@ public class TerrainGenerator : MonoBehaviour
         waves = LevelGeneration.waveSeeds;
 
         GenerateMesh();
+        CreateVertexObjects(vertexObjects);
     }
 
 
@@ -182,5 +179,20 @@ public class TerrainGenerator : MonoBehaviour
         }
 
         return terrainTypes[terrainTypes.Length - 1];
+    }
+
+    private GameObject[] CreateVertexObjects(GameObject[] array)
+    {
+        array = new GameObject[noiseArray.Length];
+
+        for (int i = 0; i < array.Length; i++)
+        {
+            array[i] = new GameObject();
+            array[i].transform.position = newVertices[i];
+            array[i].transform.tag = "Vertex";
+            array[i].AddComponent<SphereCollider>();
+        }
+
+        return array;
     }
 }

@@ -60,14 +60,13 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        //Initialisation
         ResetTimer();
         towerPlaced = false;
+
         GetComponent<LevelGeneration>();
         enemySpawnPoints = LevelGeneration.enemySpawns;
 
-        // need a check for if the tower has been placed
-        CalculateDefenderSpawn();
-        StartCoroutine(SpawnEnemy());
     }
 
 
@@ -81,6 +80,9 @@ public class GameManager : MonoBehaviour
         {
             CalculateDefenderSpawn();
             StartCoroutine(SpawnEnemy());
+            towerPlaced = false;
+            timeDuration = 120;
+            ResetTimer();
         }
     }
 

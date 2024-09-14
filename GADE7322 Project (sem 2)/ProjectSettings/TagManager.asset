@@ -9,6 +9,7 @@ TagManager:
   - Tower
   - Enemy
   - Defender
+  - Vertex
   layers:
   - Default
   - TransparentFX
