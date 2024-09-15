@@ -360,11 +360,9 @@
 "Assets/Scripts/Terrain Generation/TerrainGenerator.cs"
 "Assets/Scripts/Terrain Generation/Wave.cs"
 "Assets/Scripts/Tower Placement.cs"
-"Assets/Scripts/Unit buttons.cs"
 "Assets/Scripts/Units/Defender.cs"
 "Assets/Scripts/Units/Enemy.cs"
 "Assets/Scripts/Units/EnemyPathing.cs"
-"Assets/Scripts/Units/Tile.cs"
 "Assets/Scripts/Units/Tower.cs"
 "Assets/Scripts/Units/Unit.cs"
 -langversion:9.0
