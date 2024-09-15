@@ -11,10 +11,6 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    private GameObject[] enemySpawnPoints;
-    private GameObject[] defenderSpawnPoints = new GameObject[3];
-    public GameObject Tower;
-
     #region GAME OBJECTS
     [SerializeField]
     private GameObject enemyTarget;
@@ -23,18 +19,18 @@ public class GameManager : MonoBehaviour
     private GameObject enemyPrefab;
 
     [SerializeField]
-    private GameObject defenderPrefab;
+    public GameObject[] vertexArray; 
 
-    [SerializeField]
-    private GameObject towerPrefab;
+    private GameObject[] enemySpawnPoints;
     #endregion
 
-    private enum UnitType { Tower, Enemy, Defender };
-    private UnitType unitType;
-
-    private bool towerPlaced;
+    public bool towerPlaced;
     private float timer;
     private float timeDuration = 90;
+    private bool vertexesAssigned;
+    private bool canSpawn;
+    private int enemyCount;
+
 
     #region TIMER OBJECTS
     [SerializeField]
@@ -63,9 +59,11 @@ public class GameManager : MonoBehaviour
         //Initialisation
         ResetTimer();
         towerPlaced = false;
+        vertexesAssigned = false;
 
-        GetComponent<LevelGeneration>();
+        LevelGeneration LG = gameObject.GetComponent<LevelGeneration>();
         enemySpawnPoints = LevelGeneration.enemySpawns;
+
 
     }
 
@@ -75,14 +73,36 @@ public class GameManager : MonoBehaviour
         timer -= Time.deltaTime; //countdown
         UpdateTimerDisplay(timer);
 
+        GameObject tower = GameObject.FindGameObjectWithTag("Tower");
+
+        if (tower != null)
+            towerPlaced = true;
+
+        if (vertexesAssigned == false)
+        {
+            //GenerateVertexObjects();
+            //Debug.Log(vertexArray.Length);
+            vertexesAssigned = true;
+        }
+        
         //need to put tower-check code here
         if (towerPlaced == true)
         {
-            CalculateDefenderSpawn();
-            StartCoroutine(SpawnEnemy());
-            towerPlaced = false;
+            canSpawn = true;
             timeDuration = 120;
-            ResetTimer();
+            //ResetTimer();
+
+            
+        }
+
+        if (canSpawn)
+        {
+            if (enemyCount < 16)
+            {
+                //SpawnUnit();
+                canSpawn = false;
+                enemyCount++;
+            }
         }
     }
 
@@ -103,30 +123,10 @@ public class GameManager : MonoBehaviour
         timer = timeDuration;
     }
 
-    private void SpawnUnit(UnitType type, Vector3 value)
+    private void SpawnUnit()
     {
-        switch (type)
-        {
-            case UnitType.Tower:
-                GameObject tower = Instantiate(towerPrefab, value, Quaternion.identity);
-                Tower = tower;
-                tower.transform.tag = "Tower";
-                towerPlaced = true;
-                break;
-
-            case UnitType.Enemy:
-                GameObject enemy = Instantiate(enemyPrefab, RandomSpawnPoint(enemySpawnPoints).transform.position, Quaternion.identity);
-                enemy.transform.tag = "Enemy";
-                break;
-
-            case UnitType.Defender:
-                GameObject defender = Instantiate(defenderPrefab, RandomSpawnPoint(defenderSpawnPoints).transform.position, Quaternion.identity);
-                defender.transform.tag = "Defender";
-                break;
-
-            default:
-                break;
-        }
+        GameObject enemy = Instantiate(enemyPrefab, RandomSpawnPoint(enemySpawnPoints).transform.position, Quaternion.identity);
+        enemy.transform.tag = "Enemy";
     }
 
     private GameObject RandomSpawnPoint(GameObject[] array)
@@ -143,40 +143,36 @@ public class GameManager : MonoBehaviour
         while (count < 10)
         {
             yield return new WaitForSeconds(3);
-            SpawnUnit(UnitType.Enemy, Vector3.zero);
+            SpawnUnit();
 
             count++;
         }
     }
 
-    private IEnumerator SpawnDefender()
+    private void GenerateVertexObjects()
     {
-        SpawnUnit(UnitType.Defender, Vector3.zero);
-        yield return new WaitForSeconds(0);
-    }
+        LevelGeneration LG = gameObject.GetComponent<LevelGeneration>();
+        GameObject[] array = new GameObject[9 * 121]; //array to hold the vertex objects
 
-    public void CallDefenders()
-    {
-        StartCoroutine(SpawnDefender());
-    }
-
-    private void CalculateDefenderSpawn()
-    {
-        // spawn a defender within a 3 unit radius of the tower
-        for (int i = 0; i < defenderSpawnPoints.Length; i++)
+        int index = 0;
+        foreach (GameObject tile in LG.tiles)
         {
-            defenderSpawnPoints[i] = new GameObject();
+            MeshFilter mf = tile.GetComponent<MeshFilter>();
+            Matrix4x4 localToWorld = transform.localToWorldMatrix;
+
+            for (int i = 0; i < mf.mesh.vertices.Length; i++)
+            {
+                Vector3 worldV = localToWorld.MultiplyPoint3x4(mf.mesh.vertices[i]);
+                array[index] = new GameObject();
+                array[index].transform.position = worldV;
+                array[index].transform.tag = "Vertex";
+
+                index++;
+            }
+
+
         }
 
-        defenderSpawnPoints[0].transform.position = new Vector3(Tower.transform.position.x + 3, Tower.transform.position.y, Tower.transform.position.z);
-        defenderSpawnPoints[1].transform.position = new Vector3(Tower.transform.position.x - 3, Tower.transform.position.y, Tower.transform.position.z);
-        defenderSpawnPoints[2].transform.position = new Vector3(Tower.transform.position.x, Tower.transform.position.y, Tower.transform.position.z + 3);
-        defenderSpawnPoints[3].transform.position = new Vector3(Tower.transform.position.x, Tower.transform.position.y, Tower.transform.position.z - 3);
-    }
-
-    public void PlaceTower()
-    {
-        Vector3 position = new Vector3(10, 0.1f, 10);
-        SpawnUnit(UnitType.Tower, position);
+        vertexArray = array;
     }
 }

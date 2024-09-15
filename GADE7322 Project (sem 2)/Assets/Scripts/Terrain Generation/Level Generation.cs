@@ -17,19 +17,15 @@ public class LevelGeneration : MonoBehaviour
     [SerializeField]
     private int seeds;
 
-    private int size = 11;
     public static Wave[] waveSeeds;
     private float[] frequencies = new float[] { 0.25f, 0.5f, 1f };
     private static int numOfSpawns = 3;
     public static GameObject[] enemySpawns = new GameObject[numOfSpawns];
-    private Tile[] tiles = new Tile[9]; //change manually !!
-    GameObject[] vertexes = new GameObject[11 * 11 * 9];
+    public GameObject[] tiles = new GameObject[9]; //change manually !!
 
 
     void Start()
     {
-        GetComponent<TerrainGenerator>();
-
         waveSeeds = GenerateSeeds();
         GenerateLevel();
     }
@@ -41,7 +37,7 @@ public class LevelGeneration : MonoBehaviour
         int tileX = (int)tileSize.x;
         int tileZ = (int)tileSize.z;
 
-        int index = 0;
+        int x = 0;
 
         for (int i = 0; i < width; i++)
         {
@@ -50,13 +46,13 @@ public class LevelGeneration : MonoBehaviour
                 Vector3 tilePosition = new Vector3(this.gameObject.transform.position.x + i * tileX, this.gameObject.transform.position.y, this.gameObject.transform.position.z + j * tileZ);
                 GameObject tile = Instantiate(tilePrefab, tilePosition, Quaternion.identity);
 
-                Tile newTile = new Tile();
-                newTile.prefab = tile;
-                tiles[index++] = newTile;
+                tiles[x] = tile;
+                x++;
             }
         }
 
         GenerateSpawnPoints();
+        Debug.Log("Level generated");
     }
 
     private Wave[] GenerateSeeds()
@@ -135,18 +131,6 @@ public class LevelGeneration : MonoBehaviour
         }
 
         return posVector;
-    }
-
-    private void GenerateVertexObjects()
-    {
-        GameObject[] tempVertexes = new GameObject[tiles.Length];
-        int index = 0;
-
-        foreach (Tile tile in tiles)
-        {
-            //TerrainGenerator tg = tile.GetComponent<TerrainGenerator>();
-            //tempVertexes[index] = tile.TerrainGenerator.CreateVertexObjects();
-        }
     }
 
 }

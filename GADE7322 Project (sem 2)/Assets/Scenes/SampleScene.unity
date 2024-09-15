@@ -153,11 +153,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c001a9df4a7ad5045a280b7f1f80e8a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Tower: {fileID: 0}
   enemyTarget: {fileID: 648008762}
   enemyPrefab: {fileID: 7302186389331117702, guid: c045e7a97d1814544bac720cc0910692, type: 3}
-  defenderPrefab: {fileID: 7926446794956146792, guid: 8deb90d50b63fb140aee25b4636d4262, type: 3}
-  towerPrefab: {fileID: 1326114386137306042, guid: 557622bece3c768498adc10ea9ccd847, type: 3}
+  towerPlaced: 0
   minute1: {fileID: 307248078}
   minute2: {fileID: 533857112}
   seperator: {fileID: 376427740}
@@ -1969,6 +1967,69 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 855243160}
   m_CullTransparentMesh: 1
+--- !u!1 &915382143
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 915382145}
+  - component: {fileID: 915382144}
+  - component: {fileID: 915382146}
+  m_Layer: 0
+  m_Name: Unit Placement Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &915382144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 915382143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e57dced06819d6c4f86c7374db0a4c36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  towerPrefab: {fileID: 1326114386137306042, guid: 557622bece3c768498adc10ea9ccd847, type: 3}
+  GM: {fileID: 53922840}
+  hotkey: 116
+--- !u!4 &915382145
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 915382143}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 593.977, y: 305.5797, z: 482.04398}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &915382146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 915382143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f12e6e81fb4172641811df387bbb80c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defenderPrefab: {fileID: 7926446794956146792, guid: 8deb90d50b63fb140aee25b4636d4262, type: 3}
+  GM: {fileID: 53922840}
+  hotkey: 100
 --- !u!1 &927739357
 GameObject:
   m_ObjectHideFlags: 0
@@ -3577,7 +3638,6 @@ GameObject:
   - component: {fileID: 1491049518}
   - component: {fileID: 1491049517}
   - component: {fileID: 1491049516}
-  - component: {fileID: 1491049519}
   m_Layer: 0
   m_Name: Tower
   m_TagString: Untagged
@@ -3650,9 +3710,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1491049519}
-        m_TargetAssemblyTypeName: Unitbuttons, Assembly-CSharp
-        m_MethodName: TowerButtonClicked
+      - m_Target: {fileID: 915382144}
+        m_TargetAssemblyTypeName: TowerPlacement, Assembly-CSharp
+        m_MethodName: ButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3700,18 +3760,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1491049514}
   m_CullTransparentMesh: 1
---- !u!114 &1491049519
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1491049514}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f3a7bb7bb2a3a84aa9229a75f1b693e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1711946883
 GameObject:
   m_ObjectHideFlags: 0
@@ -3914,7 +3962,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: 'Defender
+
+    (D)'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3941,8 +3991,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 10
+  m_fontSizeBase: 10
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -4157,7 +4207,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: 'Tower
+
+    (T)'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4184,8 +4236,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 10
+  m_fontSizeBase: 10
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -4246,7 +4298,6 @@ GameObject:
   - component: {fileID: 2034490559}
   - component: {fileID: 2034490558}
   - component: {fileID: 2034490557}
-  - component: {fileID: 2034490560}
   m_Layer: 0
   m_Name: Defender
   m_TagString: Untagged
@@ -4319,9 +4370,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2034490560}
-        m_TargetAssemblyTypeName: Unitbuttons, Assembly-CSharp
-        m_MethodName: DefenderButtonClicked
+      - m_Target: {fileID: 915382146}
+        m_TargetAssemblyTypeName: DefenderPlacement, Assembly-CSharp
+        m_MethodName: ButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4369,18 +4420,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2034490555}
   m_CullTransparentMesh: 1
---- !u!114 &2034490560
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2034490555}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f3a7bb7bb2a3a84aa9229a75f1b693e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2085273469
 GameObject:
   m_ObjectHideFlags: 0

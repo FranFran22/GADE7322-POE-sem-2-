@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
@@ -34,7 +35,6 @@ public class TerrainGenerator : MonoBehaviour
     public static Vector3[] newVertices = new Vector3[size * size];
     private int scalingFactor = 3;
     private float heightMultiplier = 3;
-    public static GameObject[] vertexObjects;
     private MeshRenderer mRenderer;
     private MeshFilter mFilter;
     private MeshCollider mCollider;
@@ -59,7 +59,6 @@ public class TerrainGenerator : MonoBehaviour
         waves = LevelGeneration.waveSeeds;
 
         GenerateMesh();
-        CreateVertexObjects(vertexObjects);
     }
 
 
@@ -181,18 +180,4 @@ public class TerrainGenerator : MonoBehaviour
         return terrainTypes[terrainTypes.Length - 1];
     }
 
-    private GameObject[] CreateVertexObjects(GameObject[] array)
-    {
-        array = new GameObject[noiseArray.Length];
-
-        for (int i = 0; i < array.Length; i++)
-        {
-            array[i] = new GameObject();
-            array[i].transform.position = newVertices[i];
-            array[i].transform.tag = "Vertex";
-            array[i].AddComponent<SphereCollider>();
-        }
-
-        return array;
-    }
 }
