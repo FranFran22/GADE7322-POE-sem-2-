@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
+using System.Security.Cryptography;
 
 // Game only starts when the tower is placed
 // Player will have 30 seconds to place the tower, otherwise it will be randomly spawned
@@ -22,15 +24,20 @@ public class GameManager : MonoBehaviour
     public GameObject[] vertexArray; 
 
     private GameObject[] enemySpawnPoints;
+    public Enemy[] enemies = new Enemy[15];
+    public List<GameObject>[] paths = new List<GameObject>[3];
+    private GameObject tower;
     #endregion
 
     public bool towerPlaced;
     private float timer;
     private float timeDuration = 90;
-    private bool vertexesAssigned;
-    private bool canSpawn;
-    private int enemyCount;
 
+    [SerializeField]
+    private bool canSpawn;
+
+    public bool pathsCreated;
+    private int numEnemies;
 
     #region TIMER OBJECTS
     [SerializeField]
@@ -59,12 +66,11 @@ public class GameManager : MonoBehaviour
         //Initialisation
         ResetTimer();
         towerPlaced = false;
-        vertexesAssigned = false;
+        pathsCreated = false;
+        numEnemies = 0;
 
         LevelGeneration LG = gameObject.GetComponent<LevelGeneration>();
         enemySpawnPoints = LevelGeneration.enemySpawns;
-
-
     }
 
 
@@ -72,38 +78,41 @@ public class GameManager : MonoBehaviour
     {
         timer -= Time.deltaTime; //countdown
         UpdateTimerDisplay(timer);
+        tower = GameObject.FindGameObjectWithTag("Tower");
 
-        GameObject tower = GameObject.FindGameObjectWithTag("Tower");
-
+        //Tower Checks
         if (tower != null)
+        {
             towerPlaced = true;
 
-        if (vertexesAssigned == false)
-        {
-            //GenerateVertexObjects();
-            //Debug.Log(vertexArray.Length);
-            vertexesAssigned = true;
+            if (pathsCreated == false)
+            {
+                Debug.Log("Creating paths ...");
+                CreatePaths();
+                AssignPaths();
+                pathsCreated = true;
+            }     
         }
         
-        //need to put tower-check code here
         if (towerPlaced == true)
         {
             canSpawn = true;
-            timeDuration = 120;
-            //ResetTimer();
-
-            
+            timeDuration = 120;  
         }
+
+        //Enemy Spawning Checks
+        if (numEnemies > 15)
+            canSpawn = false;
 
         if (canSpawn)
         {
-            if (enemyCount < 16)
+            if (numEnemies < 16)
             {
-                //SpawnUnit();
-                canSpawn = false;
-                enemyCount++;
+                StartCoroutine(SpawnEnemy());
             }
         }
+
+
     }
 
 
@@ -118,6 +127,7 @@ public class GameManager : MonoBehaviour
         second1.text = currentTime[2].ToString();
         second2.text = currentTime[3].ToString();
     }
+
     private void ResetTimer()
     {
         timer = timeDuration;
@@ -127,6 +137,14 @@ public class GameManager : MonoBehaviour
     {
         GameObject enemy = Instantiate(enemyPrefab, RandomSpawnPoint(enemySpawnPoints).transform.position, Quaternion.identity);
         enemy.transform.tag = "Enemy";
+
+        List<GameObject> temp = new List<GameObject>();
+        Enemy newEnemy = new Enemy(enemy, temp);
+
+        enemies[numEnemies-1] = newEnemy;
+
+        Debug.Log("Enemy " + numEnemies + " of 15 spawned");
+        numEnemies++;
     }
 
     private GameObject RandomSpawnPoint(GameObject[] array)
@@ -137,42 +155,66 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator SpawnEnemy()
     {
-        yield return new WaitForSeconds(5);
-        int count = 0;
-
-        while (count < 10)
+        for (int i = 0; i < enemies.Length; i++)
         {
-            yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(5);
             SpawnUnit();
-
-            count++;
-        }
+        }   
     }
 
-    private void GenerateVertexObjects()
+    private void CreatePaths()
     {
-        LevelGeneration LG = gameObject.GetComponent<LevelGeneration>();
-        GameObject[] array = new GameObject[9 * 121]; //array to hold the vertex objects
+        Vector3 startPosition;
+        Vector3 endPosition;
+        float posX = 0;
+        float posZ = 0;
 
-        int index = 0;
-        foreach (GameObject tile in LG.tiles)
+        int i = 0; //path index
+        foreach (GameObject spawn in enemySpawnPoints)
         {
-            MeshFilter mf = tile.GetComponent<MeshFilter>();
-            Matrix4x4 localToWorld = transform.localToWorldMatrix;
+            List<GameObject> holder = new List<GameObject>(); //creates a new list to store the pathing waypoints
+            startPosition = spawn.transform.position;
+            endPosition = new Vector3(tower.transform.position.x-2, tower.transform.position.y, tower.transform.position.z-2);
 
-            for (int i = 0; i < mf.mesh.vertices.Length; i++)
+            for (int x = 0; x < 5; x++) //generate the waypoints
             {
-                Vector3 worldV = localToWorld.MultiplyPoint3x4(mf.mesh.vertices[i]);
-                array[index] = new GameObject();
-                array[index].transform.position = worldV;
-                array[index].transform.tag = "Vertex";
+                if (x > 0)
+                    startPosition = holder[x - 1].transform.position;
 
-                index++;
+                posX = UnityEngine.Random.Range(startPosition.x, endPosition.x);
+                posZ = UnityEngine.Random.Range(startPosition.z, endPosition.z);
+
+                GameObject temp = new GameObject();
+                temp.transform.position = new Vector3(posX, spawn.transform.position.y, posZ);
+
+                temp.transform.AddComponent<BoxCollider>();
+                BoxCollider c = temp.transform.GetComponent<BoxCollider>();
+                c.size = new Vector3(0.1f, 0.1f, 0.1f);
+
+                c.isTrigger = true;
+                temp.transform.tag = "Waypoint";
+
+                holder.Add(temp);
             }
 
+            //Debug.Log(holder.Count);
 
+            paths[i] = new List<GameObject>();
+            paths[i].AddRange(holder);
+            i++;
         }
 
-        vertexArray = array;
+        pathsCreated = true;
+    }
+
+    private void AssignPaths()
+    {
+        for (int i = 0; i < enemies.Length; i++)
+        {
+            float randomNum = UnityEngine.Random.Range(0, paths.Length);
+            //Debug.Log(paths[(int)randomNum].Count);
+
+            enemies[i].waypointList = paths[(int)randomNum];
+        }
     }
 }

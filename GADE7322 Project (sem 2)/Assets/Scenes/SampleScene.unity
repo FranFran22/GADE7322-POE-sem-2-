@@ -154,7 +154,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyTarget: {fileID: 648008762}
-  enemyPrefab: {fileID: 7302186389331117702, guid: c045e7a97d1814544bac720cc0910692, type: 3}
+  enemyPrefab: {fileID: 1137209091045498742, guid: 150f3fcf29690f045b17e223e7a1ca54, type: 3}
+  vertexArray: []
   towerPlaced: 0
   minute1: {fileID: 307248078}
   minute2: {fileID: 533857112}
@@ -192,6 +193,16 @@ MonoBehaviour:
   depth: 3
   tilePrefab: {fileID: 6784540716964894963, guid: 0ed6483c7c5c8d34ab41285951a85687, type: 3}
   seeds: 4
+  tiles:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &65898364
 GameObject:
   m_ObjectHideFlags: 0
@@ -1997,9 +2008,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e57dced06819d6c4f86c7374db0a4c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  towerPrefab: {fileID: 1326114386137306042, guid: 557622bece3c768498adc10ea9ccd847, type: 3}
+  towerPrefab: {fileID: 1870506563476296812, guid: c3045314129c7f148ac2241e1da395cf, type: 3}
   GM: {fileID: 53922840}
   hotkey: 116
+  clicked: 0
 --- !u!4 &915382145
 Transform:
   m_ObjectHideFlags: 0
@@ -2027,9 +2039,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f12e6e81fb4172641811df387bbb80c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defenderPrefab: {fileID: 7926446794956146792, guid: 8deb90d50b63fb140aee25b4636d4262, type: 3}
+  defenderPrefab: {fileID: 254257282262356831, guid: 9ebb86609c45e7941954c5308dccac94, type: 3}
   GM: {fileID: 53922840}
   hotkey: 100
+  clicked: 0
 --- !u!1 &927739357
 GameObject:
   m_ObjectHideFlags: 0

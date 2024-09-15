@@ -4,18 +4,14 @@ using UnityEngine;
 
 public class Enemy : Unit
 {
-    public Enemy(GameObject pref, GameObject spn)
+    public List<GameObject> waypointList;
+
+    public Enemy(GameObject pref, List<GameObject> list)
     {
         health = 100;
         damage = 50;
-        speed = 15f;
-        spawn = spn;
-        prefab = InstantiatePrefab(pref, spn); ;
-    }
-
-    public override GameObject InstantiatePrefab(GameObject prefab, GameObject spawn)
-    {
-        GameObject obj = GameObject.Instantiate(prefab, spawn.transform);
-        return obj;
+        speed = 10f;
+        prefab = pref;
+        waypointList = list;
     }
 }
