@@ -7,6 +7,7 @@ using UnityEngine;
 using TMPro;
 using Unity.VisualScripting;
 using System.Security.Cryptography;
+using static UnityEngine.EventSystems.EventTrigger;
 
 // Game only starts when the tower is placed
 // Player will have 30 seconds to place the tower, otherwise it will be randomly spawned
@@ -21,7 +22,10 @@ public class GameManager : MonoBehaviour
     private GameObject enemyPrefab;
 
     [SerializeField]
-    public GameObject[] vertexArray; 
+    public GameObject[] vertexArray;
+
+    [SerializeField]
+    public Tower towerUnit;
 
     private GameObject[] enemySpawnPoints;
     public Enemy[] enemies = new Enemy[15];
@@ -68,6 +72,7 @@ public class GameManager : MonoBehaviour
         towerPlaced = false;
         pathsCreated = false;
         numEnemies = 0;
+        canSpawn = false;
 
         LevelGeneration LG = gameObject.GetComponent<LevelGeneration>();
         enemySpawnPoints = LevelGeneration.enemySpawns;
@@ -84,35 +89,42 @@ public class GameManager : MonoBehaviour
         if (tower != null)
         {
             towerPlaced = true;
+            canSpawn = true;
+
+            TowerPlacement TP = tower.GetComponent<TowerPlacement>();
+            towerUnit = TP.tower;
 
             if (pathsCreated == false)
             {
                 Debug.Log("Creating paths ...");
                 CreatePaths();
-                AssignPaths();
+                CreateEnemies();
                 pathsCreated = true;
             }     
         }
         
         if (towerPlaced == true)
         {
-            canSpawn = true;
             timeDuration = 120;  
         }
 
-        //Enemy Spawning Checks
         if (numEnemies > 15)
             canSpawn = false;
 
+        // this code needs to spawn the enemies in intervals (not all at once)
         if (canSpawn)
         {
-            if (numEnemies < 16)
+            float time = Mathf.FloorToInt(timer % 5);
+            Debug.Log(time);
+
+            if (time == 0 && numEnemies < 16)
             {
-                StartCoroutine(SpawnEnemy());
+                //Debug.Log("Enemy spawned");
+
+                SpawnEnemy();
+                numEnemies++;
             }
         }
-
-
     }
 
 
@@ -133,33 +145,18 @@ public class GameManager : MonoBehaviour
         timer = timeDuration;
     }
 
-    private void SpawnUnit()
-    {
-        GameObject enemy = Instantiate(enemyPrefab, RandomSpawnPoint(enemySpawnPoints).transform.position, Quaternion.identity);
-        enemy.transform.tag = "Enemy";
-
-        List<GameObject> temp = new List<GameObject>();
-        Enemy newEnemy = new Enemy(enemy, temp);
-
-        enemies[numEnemies-1] = newEnemy;
-
-        Debug.Log("Enemy " + numEnemies + " of 15 spawned");
-        numEnemies++;
-    }
-
     private GameObject RandomSpawnPoint(GameObject[] array)
     {
         float x = UnityEngine.Random.Range(0, array.Length);
         return array[(int)x];
     }
 
-    private IEnumerator SpawnEnemy()
+    private void SpawnEnemy()
     {
-        for (int i = 0; i < enemies.Length; i++)
-        {
-            yield return new WaitForSeconds(5);
-            SpawnUnit();
-        }   
+        GameObject enemy = Instantiate(enemyPrefab, RandomSpawnPoint(enemySpawnPoints).transform.position, Quaternion.identity);
+        enemy.transform.tag = "Enemy";
+
+        Debug.Log("Enemy " + numEnemies + " of 15 spawned");
     }
 
     private void CreatePaths()
@@ -207,14 +204,19 @@ public class GameManager : MonoBehaviour
         pathsCreated = true;
     }
 
-    private void AssignPaths()
+    private void CreateEnemies()
     {
+
         for (int i = 0; i < enemies.Length; i++)
         {
+            List<GameObject> temp = new List<GameObject>();
             float randomNum = UnityEngine.Random.Range(0, paths.Length);
-            //Debug.Log(paths[(int)randomNum].Count);
+            temp = paths[(int)randomNum];
 
-            enemies[i].waypointList = paths[(int)randomNum];
+            Enemy newEnemy = new Enemy(enemyPrefab, temp);
+
+            enemies[i] = newEnemy;
         }
+        
     }
 }

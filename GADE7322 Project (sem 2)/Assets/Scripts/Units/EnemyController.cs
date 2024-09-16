@@ -20,7 +20,7 @@ public class EnemyController : MonoBehaviour
         GM = obj.GetComponent<GameManager>();
         enemy = GM.enemies[(int)RandomNum()];
 
-        Debug.Log(enemy.waypointList.Count);
+        //Debug.Log(enemy.waypointList.Count);
 
         waypoints = enemy.waypointList;
         speed = enemy.speed;
@@ -57,6 +57,35 @@ public class EnemyController : MonoBehaviour
 
                 index++;
             }
+        }
+
+        if (other.tag == "Tower")
+        {
+            Debug.Log("Enemy near tower!");
+            targetLocation = tower.transform.position;
+
+            //attack tower
+            Attack(other.tag);
+        }
+    }
+
+    private void Attack(string unitName)
+    {
+        //need to access the GM --> UI will use this as its info
+        //need to get the unit type & change the game manager's stored health value
+
+        switch (unitName)
+        {
+            case "Tower":
+                // change towwer health
+                break;
+
+            case "Defender":
+                //change enemy health
+                break;
+
+            default:
+                break;
         }
     }
 }

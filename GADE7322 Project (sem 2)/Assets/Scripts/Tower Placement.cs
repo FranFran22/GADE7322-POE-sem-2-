@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -20,6 +21,8 @@ public class TowerPlacement : MonoBehaviour
 
     [SerializeField]
     private bool clicked;
+
+    public Tower tower;
 
     private void Start()
     {
@@ -51,6 +54,13 @@ public class TowerPlacement : MonoBehaviour
             {
                 CalculatePosition();
                 placeableObject = Instantiate(towerPrefab, position, Quaternion.identity);
+
+                placeableObject.transform.AddComponent<BoxCollider>();
+                BoxCollider BC = placeableObject.transform.GetComponent<BoxCollider>();
+                BC.size = new Vector3(3, 0.1f, 3);
+                BC.isTrigger = true;
+
+                tower = new Tower(placeableObject);
             }
                 
             else

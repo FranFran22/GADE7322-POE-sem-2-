@@ -7,7 +7,7 @@ public class Tower : Unit
     private float range { get; set; }
     
 
-    public Tower(GameObject pref, GameObject spn)
+    public Tower(GameObject pref)
     {
         health = 500;
         damage = 35;

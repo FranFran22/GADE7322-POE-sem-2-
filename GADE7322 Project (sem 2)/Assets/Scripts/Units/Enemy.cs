@@ -10,7 +10,7 @@ public class Enemy : Unit
     {
         health = 100;
         damage = 50;
-        speed = 10f;
+        speed = 2f;
         prefab = pref;
         waypointList = list;
     }
