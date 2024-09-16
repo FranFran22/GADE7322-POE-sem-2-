@@ -17,7 +17,7 @@ public class TowerPlacement : MonoBehaviour
     private KeyCode hotkey = KeyCode.T;
 
     public static GameObject placeableObject;
-    private Vector3 position;
+    private Vector3 position = new Vector3(10, 0.2f, 10);
 
     [SerializeField]
     private bool clicked;
@@ -52,7 +52,7 @@ public class TowerPlacement : MonoBehaviour
         {
             if (placeableObject == null)
             {
-                CalculatePosition();
+                //CalculatePosition(); --> not working as needed
                 placeableObject = Instantiate(towerPrefab, position, Quaternion.identity);
 
                 placeableObject.transform.AddComponent<BoxCollider>();

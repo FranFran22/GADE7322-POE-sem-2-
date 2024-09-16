@@ -27,10 +27,12 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public Tower towerUnit;
 
+    public Defender[] defenders;
+
     private GameObject[] enemySpawnPoints;
     public Enemy[] enemies = new Enemy[15];
     public List<GameObject>[] paths = new List<GameObject>[3];
-    private GameObject tower;
+    public GameObject tower;
     #endregion
 
     public bool towerPlaced;
@@ -92,7 +94,8 @@ public class GameManager : MonoBehaviour
             canSpawn = true;
 
             TowerPlacement TP = tower.GetComponent<TowerPlacement>();
-            towerUnit = TP.tower;
+            if (TP != null)
+                towerUnit = TP.tower;
 
             if (pathsCreated == false)
             {
