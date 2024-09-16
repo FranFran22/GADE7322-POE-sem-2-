@@ -27,7 +27,10 @@ public class EnemyController : MonoBehaviour
         GM = obj.GetComponent<GameManager>();
         enemy = GM.enemies[(int)RandomNum(GM.enemies.Length)];
         tower = GM.tower;
-        towerUnit = GM.towerUnit;
+
+        TowerController TC = tower.GetComponent<TowerController>();
+        towerUnit = TC.towerUnit;
+
         //targetDefender = --> need to assign this when near a defender
 
         waypoints = enemy.waypointList;
@@ -73,6 +76,10 @@ public class EnemyController : MonoBehaviour
         {
             Debug.Log("Enemy near tower!");
             targetLocation = tower.transform.position;
+            speed = 0;
+
+            Rigidbody RB = gameObject.GetComponent<Rigidbody>();
+            RB.constraints = RigidbodyConstraints.FreezePosition;
 
             //attack tower
             Attack(other.tag);
@@ -81,7 +88,6 @@ public class EnemyController : MonoBehaviour
 
     private void Attack(string unitName)
     {
-        //need to access the GM --> UI will use this as its info
         //need to get the unit type & change the game manager's stored health value
 
         switch (unitName)
@@ -101,14 +107,19 @@ public class EnemyController : MonoBehaviour
 
     private IEnumerator AttackTower()
     {
-        yield return new WaitForSeconds(2);
-        towerUnit.health = towerUnit.health - enemy.damage;
+        yield return new WaitForSeconds(1);
+        HealthBar towerHB = tower.GetComponent<HealthBar>();
+        int newHealth = towerHB.currentHealth - enemy.damage;
+        towerHB.SetHealth(newHealth);
+
+        Debug.Log("Enemy attacked tower");
     }
 
     private IEnumerator AttackDefender()
     {
         yield return new WaitForSeconds(2);
         targetDefender.health = targetDefender.health - enemy.damage;
+        Debug.Log("Enemy attacked defender");
     }
 
     private Defender FindDefender()

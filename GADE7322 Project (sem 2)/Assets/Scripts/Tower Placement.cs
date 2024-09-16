@@ -22,8 +22,6 @@ public class TowerPlacement : MonoBehaviour
     [SerializeField]
     private bool clicked;
 
-    public Tower tower;
-
     private void Start()
     {
         clicked = false;
@@ -59,8 +57,6 @@ public class TowerPlacement : MonoBehaviour
                 BoxCollider BC = placeableObject.transform.GetComponent<BoxCollider>();
                 BC.size = new Vector3(3, 0.1f, 3);
                 BC.isTrigger = true;
-
-                tower = new Tower(placeableObject);
             }
                 
             else

@@ -5,16 +5,20 @@ using UnityEngine;
 public class TowerController : MonoBehaviour
 {
     private GameManager GM;
-    private Tower towerUnit;
+    public Tower towerUnit;
     private GameObject tower;
 
     public int maxHealth;
     public int currentHealth;
-    //public HealthBar healthBar; --> ??
+    public HealthBar healthBar;
 
 
     void Start()
     {
+        tower = gameObject;
+        towerUnit = new Tower(gameObject); 
+
+        healthBar = gameObject.GetComponent<HealthBar>();
         maxHealth = towerUnit.health;
         currentHealth = maxHealth;
     }
@@ -22,6 +26,6 @@ public class TowerController : MonoBehaviour
 
     void Update()
     {
-        
+        currentHealth = healthBar.currentHealth;
     }
 }

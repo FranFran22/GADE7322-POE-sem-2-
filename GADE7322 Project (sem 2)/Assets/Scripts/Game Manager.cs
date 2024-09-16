@@ -8,6 +8,8 @@ using TMPro;
 using Unity.VisualScripting;
 using System.Security.Cryptography;
 using static UnityEngine.EventSystems.EventTrigger;
+using Unity.PlasticSCM.Editor.WebApi;
+using UnityEngine.UIElements;
 
 // Game only starts when the tower is placed
 // Player will have 30 seconds to place the tower, otherwise it will be randomly spawned
@@ -27,6 +29,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     public Tower towerUnit;
 
+    [SerializeField]
+    private GameObject GameOverCanvas;
+
     public Defender[] defenders;
 
     private GameObject[] enemySpawnPoints;
@@ -44,6 +49,9 @@ public class GameManager : MonoBehaviour
 
     public bool pathsCreated;
     private int numEnemies;
+    public int towerHealth;
+    public bool gameOver;
+    public bool phaseTwo;
 
     #region TIMER OBJECTS
     [SerializeField]
@@ -75,6 +83,8 @@ public class GameManager : MonoBehaviour
         pathsCreated = false;
         numEnemies = 0;
         canSpawn = false;
+        gameOver = false;
+        phaseTwo = false;
 
         LevelGeneration LG = gameObject.GetComponent<LevelGeneration>();
         enemySpawnPoints = LevelGeneration.enemySpawns;
@@ -93,10 +103,6 @@ public class GameManager : MonoBehaviour
             towerPlaced = true;
             canSpawn = true;
 
-            TowerPlacement TP = tower.GetComponent<TowerPlacement>();
-            if (TP != null)
-                towerUnit = TP.tower;
-
             if (pathsCreated == false)
             {
                 Debug.Log("Creating paths ...");
@@ -108,8 +114,19 @@ public class GameManager : MonoBehaviour
         
         if (towerPlaced == true)
         {
-            timeDuration = 120;  
+            timeDuration = 120;
+            TowerController TC = tower.GetComponent<TowerController>();
+            towerHealth = TC.currentHealth;
         }
+
+        //check tower health value
+        
+        if (towerHealth <= 0 && phaseTwo == true)
+        {
+            gameOver = true;
+            GameOverCanvas.SetActive(true);
+        }
+            
 
         if (numEnemies > 15)
             canSpawn = false;
@@ -117,13 +134,14 @@ public class GameManager : MonoBehaviour
         // this code needs to spawn the enemies in intervals (not all at once)
         if (canSpawn)
         {
+            
             float time = Mathf.FloorToInt(timer % 5);
             Debug.Log(time);
 
             if (time == 0 && numEnemies < 16)
             {
                 //Debug.Log("Enemy spawned");
-
+                phaseTwo = true;
                 SpawnEnemy();
                 numEnemies++;
             }

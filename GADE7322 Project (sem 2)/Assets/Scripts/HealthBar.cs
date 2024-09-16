@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
     public Slider healthBar;
-    public int health;
+    public int currentHealth;
     private int maxHealth;
 
 
@@ -25,11 +26,12 @@ public class HealthBar : MonoBehaviour
 
     void Update()
     {
-        
+        currentHealth = (int)healthBar.value;
     }
 
-    private void SetHealth(int HP)
+    public void SetHealth(int HP)
     {
         healthBar.value = HP;
+        Debug.Log("Tower health changed to " + HP);
     }
 }
