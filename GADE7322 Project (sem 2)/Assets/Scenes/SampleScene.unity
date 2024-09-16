@@ -155,6 +155,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyTarget: {fileID: 648008762}
   enemyPrefab: {fileID: 1137209091045498742, guid: 150f3fcf29690f045b17e223e7a1ca54, type: 3}
+  enemyDefaultMaterial: {fileID: 2100000, guid: 63c2f1605b45d8649938ddea7500c2e1, type: 2}
+  enemyDamagedMaterial: {fileID: 2100000, guid: 638b0073e2553674284f41414159e766, type: 2}
   vertexArray: []
   GameOverCanvas: {fileID: 1326683467}
   tower: {fileID: 0}
@@ -163,6 +165,7 @@ MonoBehaviour:
   pathsCreated: 0
   towerHealth: 0
   gameOver: 0
+  phaseTwo: 0
   minute1: {fileID: 307248078}
   minute2: {fileID: 533857112}
   seperator: {fileID: 376427740}

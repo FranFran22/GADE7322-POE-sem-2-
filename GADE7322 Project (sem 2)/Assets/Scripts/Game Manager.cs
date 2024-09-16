@@ -24,6 +24,12 @@ public class GameManager : MonoBehaviour
     private GameObject enemyPrefab;
 
     [SerializeField]
+    public Material enemyDefaultMaterial;
+
+    [SerializeField]
+    public Material enemyDamagedMaterial;
+
+    [SerializeField]
     public GameObject[] vertexArray;
 
     [SerializeField]

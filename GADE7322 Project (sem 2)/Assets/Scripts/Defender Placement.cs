@@ -57,28 +57,7 @@ public class DefenderPlacement : MonoBehaviour
 
     private void CalculatePosition(GameObject[] vertexArray)
     {
-        gameObject.GetComponent<TowerPlacement>();
-        int count = 0;
-
-        if (TowerPlacement.placeableObject != null)
-        {
-            Vector3 pos = TowerPlacement.placeableObject.transform.position;
-
-            foreach(GameObject obj in vertexArray)
-            {
-                float distance = Vector3.Distance(obj.transform.position, pos);
-
-                if (distance <= 5 && distance >= 3)
-                {
-                    if (count < defenderSpawns.Length)
-                    {
-                        defenderSpawns[count] = obj;
-                        count++;
-                    }
-                }
-            }
-        }
-
+        //generate spawns
     }
 
     public void ButtonClicked()

@@ -12,6 +12,9 @@ public class TowerController : MonoBehaviour
     public int currentHealth;
     public HealthBar healthBar;
 
+    [SerializeField]
+    public List<Enemy> enemiesInRange = new List<Enemy>();
+
 
     void Start()
     {
@@ -27,5 +30,40 @@ public class TowerController : MonoBehaviour
     void Update()
     {
         currentHealth = healthBar.currentHealth;
+        CheckForEnemies();
+
+        //if (enemiesInRange.Count > 0)
+            //StartCoroutine(Attack());
+    }
+
+    private IEnumerator Attack()
+    {
+        yield return new WaitForSeconds(2);
+
+        foreach (Enemy enemy in enemiesInRange)
+        {
+            EnemyController EC = enemy.prefab.GetComponent<EnemyController>();
+            EC.currentHealth = EC.currentHealth - towerUnit.damage;
+            EC.takingDamage = true;
+
+            Debug.Log("Tower attacked an enemy");
+        }
+
+    }
+
+    private void CheckForEnemies()
+    {
+        enemiesInRange.Clear();
+
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies)
+        {
+            EnemyController EC = enemy.GetComponent<EnemyController>();
+            if (EC.inRange == true)
+            {
+                enemiesInRange.Add(EC.enemy);
+                Debug.Log(enemiesInRange.Count + " enemies n range of tower");
+            }
+        }
     }
 }

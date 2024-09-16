@@ -14,19 +14,29 @@ public class EnemyController : MonoBehaviour
     public GameManager GM;
     private GameObject tower;
     private float speed;
-
     private Tower towerUnit;
     private Defender targetDefender;
+    public bool inRange;
+    public int maxHealth;
+    public int currentHealth;
+    public Material defaultMaterial;
+    public Material damagedMaterial;
+    public bool takingDamage;
+    private MeshRenderer meshR;
 
 
     void Start()
     {
         //Get values from GameManager:
         GameObject obj = GameObject.Find("Game Manager");
+        meshR = gameObject.GetComponent<MeshRenderer>();
 
         GM = obj.GetComponent<GameManager>();
         enemy = GM.enemies[(int)RandomNum(GM.enemies.Length)];
         tower = GM.tower;
+
+        defaultMaterial = GM.enemyDefaultMaterial;
+        damagedMaterial = GM.enemyDamagedMaterial;
 
         TowerController TC = tower.GetComponent<TowerController>();
         towerUnit = TC.towerUnit;
@@ -36,13 +46,19 @@ public class EnemyController : MonoBehaviour
         waypoints = enemy.waypointList;
         speed = enemy.speed;
         targetLocation = waypoints[0].transform.position;
+
+        maxHealth = enemy.health;
+        currentHealth = maxHealth;
+
+        inRange = false;
     }
 
 
     void Update()
     {
-        //update health
-
+        //when damaged --> change material for a small amount of time
+        //if (takingDamage == true)
+            //StartCoroutine(ShowAttack());
 
         //movement
         float step = speed * Time.deltaTime;
@@ -59,6 +75,8 @@ public class EnemyController : MonoBehaviour
     {
         if (other.tag == "Waypoint")
         {
+            inRange = true;
+
             int index = 0;
             foreach (GameObject item in waypoints)
             {
@@ -137,5 +155,20 @@ public class EnemyController : MonoBehaviour
 
         float x = RandomNum(closeDefenders.Count);
         return closeDefenders[(int) x];
+    }
+
+    private IEnumerator ShowAttack()
+    {
+        yield return new WaitUntil(() => takingDamage == true);
+        yield return new WaitForSecondsRealtime(2);
+        
+        meshR.material = damagedMaterial;
+
+        yield return new WaitForSecondsRealtime(1);
+
+        meshR.material = defaultMaterial;
+        takingDamage = false;
+
+        Debug.Log("Enemy took damage from tower");
     }
 }
