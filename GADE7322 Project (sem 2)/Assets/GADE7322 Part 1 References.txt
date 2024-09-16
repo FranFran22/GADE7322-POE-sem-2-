@@ -5,3 +5,4 @@ REFERENCES
 > https://discussions.unity.com/t/mesh-generation-out-of-array/682340/4
 > https://gamedevacademy.org/complete-guide-to-procedural-level-generation-in-unity-part-1/ 
 > https://www.youtube.com/watch?v=YI6F1x4pzpg
+> https://weeklyhow.com/how-to-make-a-health-bar-in-unity/#:~:text=So%20right-click%20on%20the,object%20and%20select%20Create%20Empty%20.&text=Next%2C%20with%20the%20Health%20Bar,as%20the%20Health%20Bar%20Border.

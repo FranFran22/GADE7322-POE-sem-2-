@@ -356,6 +356,7 @@
 -analyzer:"C:/Program Files/Unity/Hub/Editor/2022.3.0f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 "Assets/Scripts/Defender Placement.cs"
 "Assets/Scripts/Game Manager.cs"
+"Assets/Scripts/HealthBar.cs"
 "Assets/Scripts/Terrain Generation/Level Generation.cs"
 "Assets/Scripts/Terrain Generation/TerrainGenerator.cs"
 "Assets/Scripts/Terrain Generation/Wave.cs"
@@ -365,6 +366,7 @@
 "Assets/Scripts/Units/Enemy.cs"
 "Assets/Scripts/Units/EnemyController.cs"
 "Assets/Scripts/Units/Tower.cs"
+"Assets/Scripts/Units/TowerController.cs"
 "Assets/Scripts/Units/Unit.cs"
 -langversion:9.0
 

@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3286931478579316844}
   - component: {fileID: -7011620274797920556}
+  - component: {fileID: -4204789484066608024}
+  - component: {fileID: 4864014153650081279}
   m_Layer: 0
   m_Name: Tower (prefab)
   m_TagString: Tower
@@ -60,6 +62,34 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &-4204789484066608024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1870506563476296812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40c5cfbe3247ab541942e734fa222ab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 0
+  currentHealth: 0
+--- !u!114 &4864014153650081279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1870506563476296812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a1dfe8f4085a744c97996eb52d37633, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBar: {fileID: 0}
+  health: 0
 --- !u!1 &9012684169796824022
 GameObject:
   m_ObjectHideFlags: 0
