@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Defender : Unit
 {
-    public Defender(GameObject obj, GameObject spn)
+    public Defender(GameObject obj)
     {
         health = 100;
-        damage = 60;
-        speed = 10f;
+        damage = 15;
+        speed = 3f;
         prefab = obj;
     }
 }
