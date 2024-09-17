@@ -142,7 +142,7 @@ public class GameManager : MonoBehaviour
         {
             
             float time = Mathf.FloorToInt(timer % 5);
-            Debug.Log(time);
+            //Debug.Log(time);
 
             if (time == 0 && numEnemies < 16)
             {

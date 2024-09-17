@@ -8,17 +8,11 @@ public class HealthBar : MonoBehaviour
 {
     public Slider healthBar;
     public int currentHealth;
-    private int maxHealth;
+    public int maxHealth;
 
 
     void Start()
     {
-        TowerController TC = gameObject.GetComponent<TowerController>();
-        maxHealth = TC.maxHealth;
-
-        GameObject HB = GameObject.Find("Health bar (tower)");
-        healthBar = HB.GetComponent<Slider>();
-
         healthBar.maxValue = maxHealth;
         healthBar.value = maxHealth;
     }
@@ -32,6 +26,5 @@ public class HealthBar : MonoBehaviour
     public void SetHealth(int HP)
     {
         healthBar.value = HP;
-        Debug.Log("Tower health changed to " + HP);
     }
 }

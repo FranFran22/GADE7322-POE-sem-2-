@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TowerController : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class TowerController : MonoBehaviour
     public int maxHealth;
     public int currentHealth;
     public HealthBar healthBar;
+    public Slider slider;
 
     [SerializeField]
     public List<Enemy> enemiesInRange = new List<Enemy>();
@@ -21,9 +23,15 @@ public class TowerController : MonoBehaviour
         tower = gameObject;
         towerUnit = new Tower(gameObject); 
 
-        healthBar = gameObject.GetComponent<HealthBar>();
         maxHealth = towerUnit.health;
         currentHealth = maxHealth;
+
+        //initialise health bar
+        healthBar = gameObject.GetComponent<HealthBar>();
+        GameObject HB = GameObject.Find("Health bar (tower)");
+        slider = HB.GetComponent<Slider>();
+        healthBar.healthBar = slider;
+        healthBar.maxHealth = maxHealth;
     }
 
 
@@ -36,34 +44,38 @@ public class TowerController : MonoBehaviour
             //StartCoroutine(Attack());
     }
 
-    private IEnumerator Attack()
+    private IEnumerator Attack(GameObject enemy)
     {
         yield return new WaitForSeconds(2);
 
-        foreach (Enemy enemy in enemiesInRange)
+        if (enemy != null)
         {
-            EnemyController EC = enemy.prefab.GetComponent<EnemyController>();
-            EC.currentHealth = EC.currentHealth - towerUnit.damage;
-            EC.takingDamage = true;
+            HealthBar HB = enemy.GetComponent<HealthBar>();
+            int newHealth = HB.currentHealth - towerUnit.damage;
+            HB.SetHealth(newHealth);
 
             Debug.Log("Tower attacked an enemy");
         }
-
     }
 
     private void CheckForEnemies()
     {
         enemiesInRange.Clear();
-
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
         foreach (GameObject enemy in enemies)
         {
-            EnemyController EC = enemy.GetComponent<EnemyController>();
-            if (EC.inRange == true)
+            if (enemy != null)
             {
+                EnemyController EC = enemy.GetComponent<EnemyController>();
                 enemiesInRange.Add(EC.enemy);
-                Debug.Log(enemiesInRange.Count + " enemies n range of tower");
+
+                if (EC.inRange == true)
+                {
+                    StartCoroutine(Attack(enemy));
+                }
             }
+
         }
     }
 }

@@ -9,7 +9,7 @@ public class Enemy : Unit
     public Enemy(GameObject pref, List<GameObject> list)
     {
         health = 100;
-        damage = 50;
+        damage = 65;
         speed = 2f;
         prefab = pref;
         waypointList = list;

@@ -55,7 +55,7 @@ public class TowerPlacement : MonoBehaviour
 
                 placeableObject.transform.AddComponent<BoxCollider>();
                 BoxCollider BC = placeableObject.transform.GetComponent<BoxCollider>();
-                BC.size = new Vector3(3, 0.1f, 3);
+                BC.size = new Vector3(2, 0.1f, 2);
                 BC.isTrigger = true;
             }
                 

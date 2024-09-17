@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyController : MonoBehaviour
 {
@@ -16,13 +17,19 @@ public class EnemyController : MonoBehaviour
     private float speed;
     private Tower towerUnit;
     private Defender targetDefender;
+
     public bool inRange;
     public int maxHealth;
     public int currentHealth;
+
     public Material defaultMaterial;
     public Material damagedMaterial;
+
     public bool takingDamage;
     private MeshRenderer meshR;
+
+    private Slider slider;
+    public HealthBar healthBar;
 
 
     void Start()
@@ -51,6 +58,13 @@ public class EnemyController : MonoBehaviour
         currentHealth = maxHealth;
 
         inRange = false;
+
+        //initialise health bar
+        healthBar = gameObject.GetComponent<HealthBar>();
+        GameObject HB = transform.Find("Health bar prefab").gameObject;
+        slider = HB.GetComponent<Slider>();
+        healthBar.healthBar = slider;
+        healthBar.maxHealth = maxHealth;
     }
 
 
@@ -63,6 +77,12 @@ public class EnemyController : MonoBehaviour
         //movement
         float step = speed * Time.deltaTime;
         gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, targetLocation, step);
+
+        if (inRange == true && healthBar.currentHealth <= 0)
+        {
+            Debug.Log("Enemey destroyed!");
+            Destroy(gameObject);
+        }
     }
 
     private float RandomNum(int range)
@@ -125,12 +145,14 @@ public class EnemyController : MonoBehaviour
 
     private IEnumerator AttackTower()
     {
-        yield return new WaitForSeconds(1);
+
         HealthBar towerHB = tower.GetComponent<HealthBar>();
         int newHealth = towerHB.currentHealth - enemy.damage;
         towerHB.SetHealth(newHealth);
 
         Debug.Log("Enemy attacked tower");
+
+        yield return new WaitForSeconds(1);
     }
 
     private IEnumerator AttackDefender()
