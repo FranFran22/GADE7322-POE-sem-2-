@@ -46,7 +46,7 @@ public class TowerController : MonoBehaviour
 
     private IEnumerator Attack(GameObject enemy)
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(4);
 
         if (enemy != null)
         {
@@ -68,10 +68,11 @@ public class TowerController : MonoBehaviour
             if (enemy != null)
             {
                 EnemyController EC = enemy.GetComponent<EnemyController>();
-                enemiesInRange.Add(EC.enemy);
+                float distanceTo = Vector3.Distance(enemy.transform.position, gameObject.transform.position);
 
-                if (EC.inRange == true)
+                if (distanceTo < 2.5f)
                 {
+                    enemiesInRange.Add(EC.enemy);
                     StartCoroutine(Attack(enemy));
                 }
             }

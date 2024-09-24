@@ -120,7 +120,9 @@ public class EnemyController : MonoBehaviour
             RB.constraints = RigidbodyConstraints.FreezePosition;
 
             //attack tower
-            Attack(other.tag);
+            //Attack(other.tag);
+            StartCoroutine(AttackTower());
+            
         }
     }
 
@@ -145,9 +147,8 @@ public class EnemyController : MonoBehaviour
 
     private IEnumerator AttackTower()
     {
-
         HealthBar towerHB = tower.GetComponent<HealthBar>();
-        int newHealth = towerHB.currentHealth - enemy.damage;
+        int newHealth = towerHB.currentHealth - (enemy.damage + 15);
         towerHB.SetHealth(newHealth);
 
         Debug.Log("Enemy attacked tower");
