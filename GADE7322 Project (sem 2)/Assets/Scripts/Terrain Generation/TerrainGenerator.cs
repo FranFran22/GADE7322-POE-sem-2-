@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
@@ -16,10 +17,6 @@ public class TerrainType
 
 public class TerrainGenerator : MonoBehaviour
 {
-    // REFERENCES
-    // https://discussions.unity.com/t/mesh-generation-out-of-array/682340
-    // https://docs.unity3d.com/ScriptReference/Mesh.html
-
     // PROCEDURE
     // heightmap [done]
     // create mesh --> using heightmap
@@ -35,10 +32,9 @@ public class TerrainGenerator : MonoBehaviour
     private static int size = 11;
 
     private float[,] noiseArray = new float[size, size];
-    public Vector3[] newVertices = new Vector3[size * size];
+    public static Vector3[] newVertices = new Vector3[size * size];
     private int scalingFactor = 3;
     private float heightMultiplier = 3;
-
     private MeshRenderer mRenderer;
     private MeshFilter mFilter;
     private MeshCollider mCollider;
@@ -58,6 +54,9 @@ public class TerrainGenerator : MonoBehaviour
         mFilter = GetComponent<MeshFilter>();
         mCollider = GetComponent<MeshCollider>();
         mRenderer = GetComponent<MeshRenderer>();
+
+        GetComponent<LevelGeneration>();
+        waves = LevelGeneration.waveSeeds;
 
         GenerateMesh();
     }
@@ -92,7 +91,7 @@ public class TerrainGenerator : MonoBehaviour
                 noise /= normalisation; //normalise the noise value to be between 0 and 1 (for heightmap)
 
                 map[h, w] = noise;
-                Debug.Log(noise);
+                //Debug.Log(noise);
             }
         }
 

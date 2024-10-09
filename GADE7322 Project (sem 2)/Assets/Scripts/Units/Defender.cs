@@ -4,18 +4,11 @@ using UnityEngine;
 
 public class Defender : Unit
 {
-    public Defender(GameObject obj, GameObject spn)
+    public Defender(GameObject obj)
     {
         health = 100;
-        damage = 60;
-        speed = 10f;
-        spawn = spn;
-        prefab = InstantiatePrefab(obj, spn); ;
-    }
-
-    public override GameObject InstantiatePrefab(GameObject prefab, GameObject spawn)
-    {
-        GameObject obj = GameObject.Instantiate(prefab, spawn.transform);
-        return obj;
+        damage = 15;
+        speed = 3f;
+        prefab = obj;
     }
 }

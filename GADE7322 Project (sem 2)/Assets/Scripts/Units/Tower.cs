@@ -4,22 +4,13 @@ using UnityEngine;
 
 public class Tower : Unit
 {
-    private float range { get; set; }
-    
 
-    public Tower(GameObject pref, GameObject spn)
+    public Tower(GameObject pref)
     {
         health = 500;
-        damage = 35;
+        damage = 25;
         speed = 0f;
-        spawn = spn;
-        prefab = InstantiatePrefab(pref, spn);
-        this.range = range; 
+        prefab = pref;
     }
 
-    public override GameObject InstantiatePrefab(GameObject prefab, GameObject spawn)
-    {
-        GameObject obj = GameObject.Instantiate(prefab, spawn.transform);
-        return obj;
-    }
 }
