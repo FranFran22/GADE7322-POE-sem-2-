@@ -173,3 +173,24 @@ AssetImportParameters requested are different than current active one (requested
   custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
   custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
   custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 14305.061374 seconds.
+  path: Assets/Prefabs/Towers
+  artifactKey: Guid(e1d6e231a2472f64bb2170187f68f34c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Towers using Guid(e1d6e231a2472f64bb2170187f68f34c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2bd3285742e41b68c262791d184f7cbf') in 0.002729 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 16.632375 seconds.
+  path: Assets/Prefabs/Towers/archer_tower_LVL_1_rig.fbx
+  artifactKey: Guid(e7119cc6549d6984a9ee8f927ce83939) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Towers/archer_tower_LVL_1_rig.fbx using Guid(e7119cc6549d6984a9ee8f927ce83939) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '579dfc1e5466c90999fcbf14018fb430') in 0.166474 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 15
+Editor requested this worker to shutdown with reason: Scaling down because of idle timeout
+TcpMessagingSession - receive error: operation aborted. errorcode: 995, details: The I/O operation has been aborted because of either a thread exit or an application request.
+AssetImportWorker is now disconnected from the server
+Process exiting
+Exiting without the bug reporter. Application will terminate with return code 0
