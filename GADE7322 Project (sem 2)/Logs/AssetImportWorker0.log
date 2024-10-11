@@ -373,3 +373,35 @@ Received Import Request.
 Start importing Assets/Prefabs/Environment/Tree11Rot.fbx using Guid(2501bcdc1fcea2646a35248691bfe315) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b3c9f7db1bb8767f0b90594e102aae9a') in 0.016878 seconds
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 8
+========================================================================
+Received Import Request.
+  Time since last request: 141.418333 seconds.
+  path: Assets/Prefabs/Towers/ballista_tower_LVL_1.fbx
+  artifactKey: Guid(99c01540f6eeee648a447edd69cb8329) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Towers/ballista_tower_LVL_1.fbx using Guid(99c01540f6eeee648a447edd69cb8329) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'de2853b68fc69376bf44337df60e1342') in 0.066313 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 27
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/Prefabs/Towers/cannon_tower_LVL_1_rig.fbx
+  artifactKey: Guid(c4b323d19ce76e14eb2e42bf569f0eb4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Towers/cannon_tower_LVL_1_rig.fbx using Guid(c4b323d19ce76e14eb2e42bf569f0eb4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0fafd7310539830ba576f267287a14f0') in 0.033644 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 19
+========================================================================
+Received Import Request.
+  Time since last request: 0.000024 seconds.
+  path: Assets/Prefabs/Towers/wizard_tower_LVL_1_rig.fbx
+  artifactKey: Guid(df487d5cb1fb59748b7b6263b6bbbc6b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Towers/wizard_tower_LVL_1_rig.fbx using Guid(df487d5cb1fb59748b7b6263b6bbbc6b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cd950928ad2833887e0990553e0aac5a') in 0.038537 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 19
+========================================================================
+Received Import Request.
+  Time since last request: 0.000024 seconds.
+  path: Assets/Prefabs/Towers/poison_tower_LVL_1_rig.fbx
+  artifactKey: Guid(4c0ca7bc12033d84f894256063417096) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Towers/poison_tower_LVL_1_rig.fbx using Guid(4c0ca7bc12033d84f894256063417096) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '75ff857e94b0092f44a7a149bf4dcb2a') in 0.035440 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 19
