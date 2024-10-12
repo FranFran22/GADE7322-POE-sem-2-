@@ -31,7 +31,7 @@ public class TerrainGenerator : MonoBehaviour
 
     private static int size = 11;
 
-    private float[,] noiseArray = new float[size, size];
+    public float[,] noiseArray = new float[size, size];
     public static Vector3[] newVertices = new Vector3[size * size];
     private int scalingFactor = 3;
     private float heightMultiplier = 3;

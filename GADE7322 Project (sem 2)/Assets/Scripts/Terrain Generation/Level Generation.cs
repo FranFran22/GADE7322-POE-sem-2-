@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Schema;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class LevelGeneration : MonoBehaviour
@@ -22,12 +25,16 @@ public class LevelGeneration : MonoBehaviour
     private static int numOfSpawns = 3;
     public static GameObject[] enemySpawns = new GameObject[numOfSpawns];
     public GameObject[] tiles = new GameObject[9]; //change manually !!
-
+    public List<float[,]> heightMaps = new List<float[,]>();
+    private List<Vector3[]> newVertices = new List<Vector3[]>();
+    public Vector3[] vertices = new Vector3[121 * 9];
 
     void Start()
     {
         waveSeeds = GenerateSeeds();
         GenerateLevel();
+
+        GenerateVertices();
     }
 
     private void GenerateLevel()
@@ -45,6 +52,8 @@ public class LevelGeneration : MonoBehaviour
             {
                 Vector3 tilePosition = new Vector3(this.gameObject.transform.position.x + i * tileX, this.gameObject.transform.position.y, this.gameObject.transform.position.z + j * tileZ);
                 GameObject tile = Instantiate(tilePrefab, tilePosition, Quaternion.identity);
+
+                Debug.Log("spawned tile " + i + j);
 
                 tiles[x] = tile;
                 x++;
@@ -66,11 +75,11 @@ public class LevelGeneration : MonoBehaviour
             gameSeeds[i] = new Wave();
 
             //random frequency
-            float R = Random.Range(0, 3);
+            float R = UnityEngine.Random.Range(0, 3);
             gameSeeds[i].frequency = frequencies[(int)R];
 
             //random amplitude
-            float r = Random.Range(1, 6);
+            float r = UnityEngine.Random.Range(1, 6);
             gameSeeds[i].amplitude = r;
 
             gameSeeds[i].seed = seed;
@@ -101,27 +110,27 @@ public class LevelGeneration : MonoBehaviour
     {
         Vector3 posVector;
         float rndmNum;
-        float randm = Random.Range(0, 4);
+        float randm = UnityEngine.Random.Range(0, 4);
         
         switch (randm)
         {
             case 0: //left edge
-                rndmNum = Random.Range(-5, 26);
+                rndmNum = UnityEngine.Random.Range(-5, 26);
                 posVector = new Vector3(rndmNum, 0.1f, 25);
                 break;
 
             case 1: // top edge
-                rndmNum = Random.Range(-5, 26);
+                rndmNum = UnityEngine.Random.Range(-5, 26);
                 posVector = new Vector3(25, 0.1f, rndmNum);
                 break;
 
             case 2: // right edge
-                rndmNum = Random.Range(-5, 26);
+                rndmNum = UnityEngine.Random.Range(-5, 26);
                 posVector = new Vector3(rndmNum, 0.1f, -5);
                 break;
 
             case 3: // bottom edge
-                rndmNum = Random.Range(-5, 26);
+                rndmNum = UnityEngine.Random.Range(-5, 26);
                 posVector = new Vector3(-5, 0.1f, rndmNum);
                 break;
 
@@ -131,6 +140,187 @@ public class LevelGeneration : MonoBehaviour
         }
 
         return posVector;
+    }
+
+    private void GenerateVertices()
+    {
+        //tile by tile, adjust the vertices
+
+        foreach (GameObject tile in tiles)
+        {
+            Mesh mesh = tile.GetComponent<MeshFilter>().mesh;
+            Vector3[] temp = mesh.vertices;
+            Vector3[] nVertices = new Vector3[121];
+
+
+            for (int i = 0; i < temp.Length; i++)
+            {
+                //convert vertex positions to world space
+                nVertices[i] = transform.TransformPoint(temp[i]);
+            }
+
+            TerrainGenerator TG = tile.GetComponent<TerrainGenerator>();
+            int index = Array.IndexOf(tiles, tile);
+            float[,] noise = TG.noiseArray;
+            int x = 0;
+
+            switch (index)
+            {
+                case 0:              
+                    for (int i = 0; i < 11; i++)
+                    {
+                        for (int j = 0; j < 11; j++)
+                        {
+                            nVertices[x].y = noise[i, j];
+                            x++;
+                        }
+                        
+                    }
+                    newVertices.Add(nVertices);
+                    Debug.Log("tile 0's vertices corrected");
+                    break;
+
+                case 1:
+                    for (int i = 0; i < 11; i++)
+                    {
+                        for (int j = 0; j < 11; j++)
+                        {
+                            nVertices[x] = new Vector3(nVertices[x].x, noise[i, j], nVertices[x].z + 10);
+                            nVertices[x].y = noise[i, j];
+                            x++;
+                        }
+
+                    }
+                    newVertices.Add(nVertices);
+                    Debug.Log("tile 1's vertices corrected");
+                    break;
+
+                case 2:
+                    for (int i = 0; i < 11; i++)
+                    {
+                        for (int j = 0; j < 11; j++)
+                        {
+                            nVertices[x] = new Vector3(nVertices[x].x, noise[i, j], nVertices[x].z + 20);
+                            nVertices[x].y = noise[i, j];
+                            x++;
+                        }
+
+                    }
+                    newVertices.Add(nVertices);
+                    Debug.Log("tile 2's vertices corrected");
+                    break;
+
+                case 3:
+                    for (int i = 0; i < 11; i++)
+                    {
+                        for (int j = 0; j < 11; j++)
+                        {
+                            nVertices[x] = new Vector3(nVertices[x].x + 10, noise[i, j], nVertices[x].z);
+                            nVertices[x].y = noise[i, j];
+                            x++;
+                        }
+
+                    }
+                    newVertices.Add(nVertices);
+                    Debug.Log("tile 3's vertices corrected");
+                    break;
+
+                case 4:
+                    for (int i = 0; i < 11; i++)
+                    {
+                        for (int j = 0; j < 11; j++)
+                        {
+                            nVertices[x] = new Vector3(nVertices[x].x + 10, noise[i, j], nVertices[x].z + 10);
+                            nVertices[x].y = noise[i, j];
+                            x++;
+                        }
+
+                    }
+                    newVertices.Add(nVertices);
+                    Debug.Log("tile 4's vertices corrected");
+                    break;
+
+                case 5:
+                    for (int i = 0; i < 11; i++)
+                    {
+                        for (int j = 0; j < 11; j++)
+                        {
+                            nVertices[x] = new Vector3(nVertices[x].x + 10, noise[i, j], nVertices[x].z + 20);
+                            nVertices[x].y = noise[i, j];
+                            x++;
+                        }
+
+                    }
+                    newVertices.Add(nVertices);
+                    Debug.Log("tile 5's vertices corrected");
+                    break;
+
+                case 6:
+                    for (int i = 0; i < 11; i++)
+                    {
+                        for (int j = 0; j < 11; j++)
+                        {
+                            nVertices[x] = new Vector3(nVertices[x].x + 20, noise[i, j], nVertices[x].z);
+                            nVertices[x].y = noise[i, j];
+                            x++;
+                        }
+
+                    }
+                    newVertices.Add(nVertices);
+                    Debug.Log("tile 6's vertices corrected");
+                    break;
+
+                case 7:
+                    for (int i = 0; i < 11; i++)
+                    {
+                        for (int j = 0; j < 11; j++)
+                        {
+                            nVertices[x] = new Vector3(nVertices[x].x + 20, noise[i, j], nVertices[x].z + 10);
+                            nVertices[x].y = noise[i, j];
+                            x++;
+                        }
+
+                    }
+                    newVertices.Add(nVertices);
+                    Debug.Log("tile 7's vertices corrected");
+                    break;
+
+                case 8:
+                    for (int i = 0; i < 11; i++)
+                    {
+                        for (int j = 0; j < 11; j++)
+                        {
+                            nVertices[x] = new Vector3(nVertices[x].x + 20, noise[i, j], nVertices[x].z + 20);
+                            nVertices[x].y = noise[i, j];
+                            x++;
+                        }
+
+                    }
+                    newVertices.Add(nVertices);
+                    Debug.Log("tile 8's vertices corrected");
+                    break;
+
+                default:
+                    break;
+            }
+       
+        }
+
+        //assign vertices to an array
+        int p = 0;
+        for (int i = 0; i < newVertices.Count; i++)
+        {
+            for (int j = 0; j < 121; j++)
+            {
+                Debug.Log(p);
+
+                Vector3[] temp2 = newVertices[i];
+                vertices[p] = temp2[j]; //index issues ??
+                p++;
+            }
+        }
+
+        Debug.Log("all vertices assigned");
     }
 
 }

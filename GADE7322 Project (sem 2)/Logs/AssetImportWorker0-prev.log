@@ -15,7 +15,7 @@ G:/Vega 2024/GADE/GADE7322-POE-sem-2-/GADE7322 Project (sem 2)
 -logFile
 Logs/AssetImportWorker0.log
 -srvPort
-58625
+55669
 Successfully changed project path to: G:/Vega 2024/GADE/GADE7322-POE-sem-2-/GADE7322 Project (sem 2)
 G:/Vega 2024/GADE/GADE7322-POE-sem-2-/GADE7322 Project (sem 2)
 [UnityMemory] Configuration Parameters - Can be set up in boot.config
@@ -49,11 +49,11 @@ G:/Vega 2024/GADE/GADE7322-POE-sem-2-/GADE7322 Project (sem 2)
     "memorysetup-temp-allocator-size-cloud-worker=32768"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-Player connection [3004] Host "[IP] 10.0.0.8 [Port] 0 [Flags] 2 [Guid] 2427959780 [EditorId] 2427959780 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-8MTICCV) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined multi-casting on [225.0.0.222:54997]...
+Player connection [20248] Host "[IP] 10.0.0.8 [Port] 0 [Flags] 2 [Guid] 1773356906 [EditorId] 1773356906 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-8MTICCV) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined multi-casting on [225.0.0.222:54997]...
 
-Player connection [3004] Host "[IP] 10.0.0.8 [Port] 0 [Flags] 2 [Guid] 2427959780 [EditorId] 2427959780 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-8MTICCV) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined alternative multi-casting on [225.0.0.222:34997]...
+Player connection [20248] Host "[IP] 10.0.0.8 [Port] 0 [Flags] 2 [Guid] 1773356906 [EditorId] 1773356906 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-8MTICCV) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined alternative multi-casting on [225.0.0.222:34997]...
 
-Refreshing native plugins compatible for Editor in 8.74 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 9.75 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2022.3.0f1 (fb119bb0b476)
 [Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2022.3.0f1/Editor/Data/Resources/UnitySubsystems
@@ -69,44 +69,44 @@ Initialize mono
 Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2022.3.0f1/Editor/Data/Managed'
 Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2022.3.0f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
 Mono config path = 'C:/Program Files/Unity/Hub/Editor/2022.3.0f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56268
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56244
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: C:/Program Files/Unity/Hub/Editor/2022.3.0f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.010516 seconds.
-- Loaded All Assemblies, in  0.295 seconds
+Registered in 0.008961 seconds.
+- Loaded All Assemblies, in  0.291 seconds
 Native extension for WindowsStandalone target not found
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.243 seconds
-Domain Reload Profiling: 536ms
-	BeginReloadAssembly (80ms)
+- Finished resetting the current domain, in  0.230 seconds
+Domain Reload Profiling: 518ms
+	BeginReloadAssembly (79ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (0ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
 		CreateAndSetChildDomain (1ms)
-	RebuildCommonClasses (32ms)
-	RebuildNativeTypeToScriptingClass (8ms)
-	initialDomainReloadingComplete (61ms)
-	LoadAllAssembliesAndSetupDomain (111ms)
-		LoadAssemblies (77ms)
+	RebuildCommonClasses (28ms)
+	RebuildNativeTypeToScriptingClass (9ms)
+	initialDomainReloadingComplete (57ms)
+	LoadAllAssembliesAndSetupDomain (115ms)
+		LoadAssemblies (76ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (103ms)
-			TypeCache.Refresh (102ms)
-				TypeCache.ScanAssembly (93ms)
+		AnalyzeDomain (108ms)
+			TypeCache.Refresh (108ms)
+				TypeCache.ScanAssembly (97ms)
 			ScanForSourceGeneratedMonoScriptInfo (0ms)
 			ResolveRequiredComponents (0ms)
-	FinalizeReload (244ms)
+	FinalizeReload (230ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (193ms)
+		SetupLoadedEditorAssemblies (181ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (10ms)
-			SetLoadedEditorAssemblies (8ms)
+			InitializePlatformSupportModulesInManaged (9ms)
+			SetLoadedEditorAssemblies (6ms)
 			RefreshPlugins (0ms)
 			BeforeProcessingInitializeOnLoad (2ms)
-			ProcessInitializeOnLoadAttributes (130ms)
-			ProcessInitializeOnLoadMethodAttributes (43ms)
+			ProcessInitializeOnLoadAttributes (122ms)
+			ProcessInitializeOnLoadMethodAttributes (42ms)
 			AfterProcessingInitializeOnLoad (0ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
@@ -116,51 +116,51 @@ Worker process is ready to serve import requests
 Begin MonoManager ReloadAssembly
 Symbol file LoadedFromMemory doesn't match image G:\Vega 2024\GADE\GADE7322-POE-sem-2-\GADE7322 Project (sem 2)\Library\PackageCache\com.unity.visualscripting@1.8.0\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll
 Symbol file LoadedFromMemory doesn't match image G:\Vega 2024\GADE\GADE7322-POE-sem-2-\GADE7322 Project (sem 2)\Library\PackageCache\com.unity.visualscripting@1.8.0\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll
-- Loaded All Assemblies, in  0.617 seconds
-Refreshing native plugins compatible for Editor in 2.24 ms, found 3 plugins.
+- Loaded All Assemblies, in  0.601 seconds
+Refreshing native plugins compatible for Editor in 2.15 ms, found 3 plugins.
 Native extension for WindowsStandalone target not found
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.620 seconds
-Domain Reload Profiling: 1234ms
-	BeginReloadAssembly (117ms)
+- Finished resetting the current domain, in  0.613 seconds
+Domain Reload Profiling: 1212ms
+	BeginReloadAssembly (119ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (5ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (22ms)
-	RebuildCommonClasses (27ms)
+		CreateAndSetChildDomain (20ms)
+	RebuildCommonClasses (28ms)
 	RebuildNativeTypeToScriptingClass (8ms)
-	initialDomainReloadingComplete (40ms)
-	LoadAllAssembliesAndSetupDomain (421ms)
-		LoadAssemblies (238ms)
+	initialDomainReloadingComplete (41ms)
+	LoadAllAssembliesAndSetupDomain (403ms)
+		LoadAssemblies (230ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (236ms)
-			TypeCache.Refresh (221ms)
-				TypeCache.ScanAssembly (210ms)
+		AnalyzeDomain (231ms)
+			TypeCache.Refresh (217ms)
+				TypeCache.ScanAssembly (206ms)
 			ScanForSourceGeneratedMonoScriptInfo (11ms)
 			ResolveRequiredComponents (3ms)
-	FinalizeReload (620ms)
+	FinalizeReload (614ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (495ms)
+		SetupLoadedEditorAssemblies (492ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (6ms)
+			InitializePlatformSupportModulesInManaged (7ms)
 			SetLoadedEditorAssemblies (4ms)
 			RefreshPlugins (0ms)
-			BeforeProcessingInitializeOnLoad (60ms)
-			ProcessInitializeOnLoadAttributes (399ms)
-			ProcessInitializeOnLoadMethodAttributes (16ms)
+			BeforeProcessingInitializeOnLoad (54ms)
+			ProcessInitializeOnLoadAttributes (401ms)
+			ProcessInitializeOnLoadMethodAttributes (17ms)
 			AfterProcessingInitializeOnLoad (10ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
 		AwakeInstancesAfterBackupRestoration (6ms)
-Launched and connected shader compiler UnityShaderCompiler.exe after 0.14 seconds
-Refreshing native plugins compatible for Editor in 2.80 ms, found 3 plugins.
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.05 seconds
+Refreshing native plugins compatible for Editor in 2.61 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 3107 Unused Serialized files (Serialized files now loaded: 0)
 Unloading 31 unused Assets / (56.3 KB). Loaded Objects now: 3572.
 Memory consumption went from 120.4 MB to 120.3 MB.
-Total: 5.821700 ms (FindLiveObjects: 0.458900 ms CreateObjectMapping: 0.151600 ms MarkObjects: 5.072700 ms  DeleteObjects: 0.136400 ms)
+Total: 3.061200 ms (FindLiveObjects: 0.245200 ms CreateObjectMapping: 0.074000 ms MarkObjects: 2.634700 ms  DeleteObjects: 0.105000 ms)
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
@@ -175,9 +175,233 @@ AssetImportParameters requested are different than current active one (requested
   custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
 Received Import Request.
-  Time since last request: 120295.230510 seconds.
-  path: Assets/Prefabs/Tower (prefab).prefab
-  artifactKey: Guid(c3045314129c7f148ac2241e1da395cf) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Prefabs/Tower (prefab).prefab using Guid(c3045314129c7f148ac2241e1da395cf) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '51d74b16d5da75da721cd8eda30ab733') in 0.138496 seconds
+  Time since last request: 13051.439111 seconds.
+  path: Assets/Prefabs/FullCharacter1.obj
+  artifactKey: Guid(212924240acee7e4b97f91642cbcc906) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/FullCharacter1.obj using Guid(212924240acee7e4b97f91642cbcc906) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '53fa7a9989f06ccdebfd05321473b16d') in 0.132841 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 12
+Number of asset objects unloaded after import = 10
+========================================================================
+Received Import Request.
+  Time since last request: 82.174958 seconds.
+  path: Assets/Prefabs/FullCharacter2.obj
+  artifactKey: Guid(b494b2a82156fe6468c382c0bd1272fc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/FullCharacter2.obj using Guid(b494b2a82156fe6468c382c0bd1272fc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '152dd2ff8add581986ee7ca712b473c6') in 0.037738 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 10
+========================================================================
+Received Import Request.
+  Time since last request: 5.368627 seconds.
+  path: Assets/Prefabs/FullCharacter3.obj
+  artifactKey: Guid(f0bd84ad96cf424479216bcaa2776e42) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/FullCharacter3.obj using Guid(f0bd84ad96cf424479216bcaa2776e42) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '87330655bf36c0c19cc80a5544469535') in 0.042661 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 10
+========================================================================
+Received Import Request.
+  Time since last request: 4.969856 seconds.
+  path: Assets/Prefabs/FullCharacter4.obj
+  artifactKey: Guid(06d1a75ef02bc7048880c59324ebfadd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/FullCharacter4.obj using Guid(06d1a75ef02bc7048880c59324ebfadd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1c35399e3f6f84fd9fc85025ebc232bd') in 0.027973 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 10
+========================================================================
+Received Import Request.
+  Time since last request: 6.340831 seconds.
+  path: Assets/Prefabs/FullCharacter5.obj
+  artifactKey: Guid(4bdbf756686c32a46bbb22ae507a9b09) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/FullCharacter5.obj using Guid(4bdbf756686c32a46bbb22ae507a9b09) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '22af3db681e1a683eb80f48cd95a501a') in 0.051908 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 10
+========================================================================
+Received Import Request.
+  Time since last request: 914.586182 seconds.
+  path: Assets/Prefabs/Character models
+  artifactKey: Guid(868f65d0bb51ec84988fd51a12f1f35f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Character models using Guid(868f65d0bb51ec84988fd51a12f1f35f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8695570983b377513a9a921bcc1a5a99') in 0.000577 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 12.734776 seconds.
+  path: Assets/Prefabs/Environment
+  artifactKey: Guid(04f269c8e56b7d945ad419978039da9c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Environment using Guid(04f269c8e56b7d945ad419978039da9c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c9fd863e8260fd57bdc9a49ab2075c67') in 0.000461 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 28.242632 seconds.
+  path: Assets/Prefabs/Environment/Tree1.fbx
+  artifactKey: Guid(1d1f59225703d084cb4a7011b7405c77) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Environment/Tree1.fbx using Guid(1d1f59225703d084cb4a7011b7405c77) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0d53d192615a89df9cc83149da51c8b4') in 0.061106 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 9
+========================================================================
+Received Import Request.
+  Time since last request: 5.746008 seconds.
+  path: Assets/Prefabs/Environment/Tree1_1Rot.fbx
+  artifactKey: Guid(f8afa16123d5acc4eb092f423e76e20f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Environment/Tree1_1Rot.fbx using Guid(f8afa16123d5acc4eb092f423e76e20f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '72354c3925f6eb2d65d0bbe12bed0f88') in 0.032838 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 9
+========================================================================
+Received Import Request.
+  Time since last request: 3.053234 seconds.
+  path: Assets/Prefabs/Environment/Tree1_1.fbx
+  artifactKey: Guid(2971c785b577e324b93b89a9406eecf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Environment/Tree1_1.fbx using Guid(2971c785b577e324b93b89a9406eecf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e3abfc944bc61e0c4642222a6528f708') in 0.023771 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 9
+========================================================================
+Received Import Request.
+  Time since last request: 16.287187 seconds.
+  path: Assets/Prefabs/Environment/Tree2.fbx
+  artifactKey: Guid(a03c654010f2a164d94c248d2e274d34) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Environment/Tree2.fbx using Guid(a03c654010f2a164d94c248d2e274d34) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '399133e32ecde4df37fbc623f648457a') in 0.044360 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 9
+========================================================================
+Received Import Request.
+  Time since last request: 8.352840 seconds.
+  path: Assets/Prefabs/Environment/Tree2Rot.fbx
+  artifactKey: Guid(67bf7086046329349888a3e5d2646f9c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Environment/Tree2Rot.fbx using Guid(67bf7086046329349888a3e5d2646f9c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b5fa43601728fa72540dcf34fcd78466') in 0.038680 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 9
+========================================================================
+Received Import Request.
+  Time since last request: 5.604075 seconds.
+  path: Assets/Prefabs/Environment/Tree2_1Rot.fbx
+  artifactKey: Guid(bd1a1a8f02f24074b91597cc48e6eee8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Environment/Tree2_1Rot.fbx using Guid(bd1a1a8f02f24074b91597cc48e6eee8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1e0ae41ffc63ec085bc4eaa0ed582896') in 0.045860 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 9
+========================================================================
+Received Import Request.
+  Time since last request: 10.696924 seconds.
+  path: Assets/Prefabs/Environment/Tree3.fbx
+  artifactKey: Guid(3e87832d40b9a7a48b3eb1a9eedb1cde) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Environment/Tree3.fbx using Guid(3e87832d40b9a7a48b3eb1a9eedb1cde) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '406091678b701a4ec94565d2bb5c6321') in 0.039586 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 9
+========================================================================
+Received Import Request.
+  Time since last request: 6.199443 seconds.
+  path: Assets/Prefabs/Environment/Tree3Rot.fbx
+  artifactKey: Guid(e3c1d4de9d223bf4b92a83cca3c20180) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Environment/Tree3Rot.fbx using Guid(e3c1d4de9d223bf4b92a83cca3c20180) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0903563582a0b14a812589e8fd14698e') in 0.126882 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 9
+========================================================================
+Received Import Request.
+  Time since last request: 6.101019 seconds.
+  path: Assets/Prefabs/Environment/Tree4.fbx
+  artifactKey: Guid(de34bd26b33bf524b8645127f9ede927) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Environment/Tree4.fbx using Guid(de34bd26b33bf524b8645127f9ede927) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c0a229762c3f64a1dc03980f68928094') in 0.030702 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 9
+========================================================================
+Received Import Request.
+  Time since last request: 3.158583 seconds.
+  path: Assets/Prefabs/Environment/Tree4_1Rot.fbx
+  artifactKey: Guid(2ea92cb60c60232438ec85f66a781bfb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Environment/Tree4_1Rot.fbx using Guid(2ea92cb60c60232438ec85f66a781bfb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '71ce83cde85b4ca787aec7b4f72de564') in 0.027310 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 9
+========================================================================
+Received Import Request.
+  Time since last request: 8.184054 seconds.
+  path: Assets/Prefabs/Environment/Tree5.fbx
+  artifactKey: Guid(75cf544fe8e01ce4ba08ae45cafd5de9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Environment/Tree5.fbx using Guid(75cf544fe8e01ce4ba08ae45cafd5de9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e881f6744666cb7e84e6ad12e224269c') in 0.040648 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 9
+========================================================================
+Received Import Request.
+  Time since last request: 0.000018 seconds.
+  path: Assets/Prefabs/Environment/Tree10Rot.fbx
+  artifactKey: Guid(730cd845139d0494285a820e802eb5c0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Environment/Tree10Rot.fbx using Guid(730cd845139d0494285a820e802eb5c0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '971cdedd68910184f239e61cf330c33d') in 0.035443 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 8
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/Prefabs/Environment/Tree12.fbx
+  artifactKey: Guid(0c6a23c818e1db14399e55af32b95747) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Environment/Tree12.fbx using Guid(0c6a23c818e1db14399e55af32b95747) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e46a3890382e632944c73dda8a4907c9') in 0.055190 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 8
+========================================================================
+Received Import Request.
+  Time since last request: 0.000024 seconds.
+  path: Assets/Prefabs/Environment/Tree13Rot.fbx
+  artifactKey: Guid(d7e9382a897175a4b8266998f7fb217a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Environment/Tree13Rot.fbx using Guid(d7e9382a897175a4b8266998f7fb217a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b7435ceccbc70f3e3a10b6c6528daf84') in 0.034354 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 8
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/Prefabs/Environment/Tree12Rot.fbx
+  artifactKey: Guid(07065a492e383e842b5c5c9a1da93696) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Environment/Tree12Rot.fbx using Guid(07065a492e383e842b5c5c9a1da93696) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c13d22a2ecee1e836570b70c9a9e21bf') in 0.018346 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 8
+========================================================================
+Received Import Request.
+  Time since last request: 0.000028 seconds.
+  path: Assets/Prefabs/Environment/Tree11.fbx
+  artifactKey: Guid(a98fd49355754b7409c8d514f12e0887) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Environment/Tree11.fbx using Guid(a98fd49355754b7409c8d514f12e0887) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e4551afc843ac72e7d17432c656327c4') in 0.016374 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 8
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/Prefabs/Environment/Tree10.fbx
+  artifactKey: Guid(8e5e463b8ad3769499770f9f2174fbfa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Environment/Tree10.fbx using Guid(8e5e463b8ad3769499770f9f2174fbfa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '89e07de0ff9a0f1b6688769e3f8e1dcd') in 0.018008 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 8
+========================================================================
+Received Import Request.
+  Time since last request: 0.000018 seconds.
+  path: Assets/Prefabs/Environment/Tree11Rot.fbx
+  artifactKey: Guid(2501bcdc1fcea2646a35248691bfe315) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Environment/Tree11Rot.fbx using Guid(2501bcdc1fcea2646a35248691bfe315) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b3c9f7db1bb8767f0b90594e102aae9a') in 0.016878 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 8
+========================================================================
+Received Import Request.
+  Time since last request: 141.418333 seconds.
+  path: Assets/Prefabs/Towers/ballista_tower_LVL_1.fbx
+  artifactKey: Guid(99c01540f6eeee648a447edd69cb8329) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Towers/ballista_tower_LVL_1.fbx using Guid(99c01540f6eeee648a447edd69cb8329) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'de2853b68fc69376bf44337df60e1342') in 0.066313 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 27
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/Prefabs/Towers/cannon_tower_LVL_1_rig.fbx
+  artifactKey: Guid(c4b323d19ce76e14eb2e42bf569f0eb4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Towers/cannon_tower_LVL_1_rig.fbx using Guid(c4b323d19ce76e14eb2e42bf569f0eb4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0fafd7310539830ba576f267287a14f0') in 0.033644 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 19
+========================================================================
+Received Import Request.
+  Time since last request: 0.000024 seconds.
+  path: Assets/Prefabs/Towers/wizard_tower_LVL_1_rig.fbx
+  artifactKey: Guid(df487d5cb1fb59748b7b6263b6bbbc6b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Towers/wizard_tower_LVL_1_rig.fbx using Guid(df487d5cb1fb59748b7b6263b6bbbc6b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cd950928ad2833887e0990553e0aac5a') in 0.038537 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 19
+========================================================================
+Received Import Request.
+  Time since last request: 0.000024 seconds.
+  path: Assets/Prefabs/Towers/poison_tower_LVL_1_rig.fbx
+  artifactKey: Guid(4c0ca7bc12033d84f894256063417096) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/Towers/poison_tower_LVL_1_rig.fbx using Guid(4c0ca7bc12033d84f894256063417096) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '75ff857e94b0092f44a7a149bf4dcb2a') in 0.035440 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 19
