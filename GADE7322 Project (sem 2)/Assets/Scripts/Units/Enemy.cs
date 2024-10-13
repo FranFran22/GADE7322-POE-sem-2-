@@ -8,10 +8,13 @@ public class Enemy : Unit
 
     public Enemy(GameObject pref, List<GameObject> list)
     {
-        health = 100;
-        damage = 65;
+        health = 65;
+        damage = 30;
         speed = 2f;
         prefab = pref;
+        range = 1.5f;
         waypointList = list;
     }
+
+    //stun ability
 }

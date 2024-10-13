@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     private GameObject enemyTarget;
 
     [SerializeField]
-    private GameObject enemyPrefab;
+    private GameObject enemyPrefab1, enemyPrefab2, enemyPrefab3;
 
     [SerializeField]
     public Material enemyDefaultMaterial;
@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
     public Defender[] defenders;
 
     private GameObject[] enemySpawnPoints;
-    public Enemy[] enemies = new Enemy[15];
+    public Unit[] enemies = new Unit[15];
     public List<GameObject>[] paths = new List<GameObject>[3];
     public GameObject tower;
     #endregion
@@ -58,6 +58,16 @@ public class GameManager : MonoBehaviour
     public int towerHealth;
     public bool gameOver;
     public bool phaseTwo;
+    private int spawnInterval;
+    private int spawnGroup;
+    private int enemyTypesToSpawn;
+    private int numEnemies1, numEnemies2, numEnemies3;
+
+    public enum Difficulty { Easy, Intermediate, Hard, Difficult  };
+    public Difficulty difficulty;
+
+    private enum EnemyType { tier1, tier2, tier3 };
+    private EnemyType enemyType;
 
     #region TIMER OBJECTS
     [SerializeField]
@@ -91,17 +101,19 @@ public class GameManager : MonoBehaviour
         canSpawn = false;
         gameOver = false;
         phaseTwo = false;
+        difficulty = Difficulty.Easy;
 
         LevelGeneration LG = gameObject.GetComponent<LevelGeneration>();
         enemySpawnPoints = LevelGeneration.enemySpawns;
     }
 
 
-    void Update()
+    void Update()  // --> organise this ...
     {
         timer -= Time.deltaTime; //countdown
         UpdateTimerDisplay(timer);
         tower = GameObject.FindGameObjectWithTag("Tower");
+        DifficultyCheck(difficulty);
 
         //Tower Checks
         if (tower != null)
@@ -148,7 +160,7 @@ public class GameManager : MonoBehaviour
             {
                 //Debug.Log("Enemy spawned");
                 phaseTwo = true;
-                SpawnEnemy();
+                //SpawnEnemy();
                 numEnemies++;
             }
         }
@@ -178,12 +190,63 @@ public class GameManager : MonoBehaviour
         return array[(int)x];
     }
 
-    private void SpawnEnemy()
+    private void SpawnEnemy(EnemyType type)
     {
-        GameObject enemy = Instantiate(enemyPrefab, RandomSpawnPoint(enemySpawnPoints).transform.position, Quaternion.identity);
-        enemy.transform.tag = "Enemy";
+        List<GameObject> temp = new List<GameObject>();
+        float randomNum;
 
-        Debug.Log("Enemy " + numEnemies + " of 15 spawned");
+        switch (type)
+        {
+            case EnemyType.tier1:
+                GameObject enemy1 = Instantiate(enemyPrefab1, RandomSpawnPoint(enemySpawnPoints).transform.position, Quaternion.identity);
+
+                //create enemy object
+                randomNum = UnityEngine.Random.Range(0, paths.Length);
+                temp = paths[(int)randomNum];
+                Enemy newEnemy = new Enemy(enemy1, temp);
+                enemy1.transform.tag = "Enemy";
+
+                numEnemies++;
+                Debug.Log("Enemy " + numEnemies + " of 15 spawned");
+
+                break;
+
+
+            case EnemyType.tier2:
+                GameObject enemy2 = Instantiate(enemyPrefab2, RandomSpawnPoint(enemySpawnPoints).transform.position, Quaternion.identity);
+
+                //create enemy object
+                randomNum = UnityEngine.Random.Range(0, paths.Length);
+                temp = paths[(int)randomNum];
+                Enemy2 newEnemy2 = new Enemy2(enemy2, temp);
+                enemy2.transform.tag = "Enemy";
+
+                numEnemies++;
+                Debug.Log("Enemy " + numEnemies + " of 15 spawned");
+
+                break;
+
+
+            case EnemyType.tier3:
+                GameObject enemy3 = Instantiate(enemyPrefab3, RandomSpawnPoint(enemySpawnPoints).transform.position, Quaternion.identity);
+
+                //create enemy object
+                randomNum = UnityEngine.Random.Range(0, paths.Length);
+                temp = paths[(int)randomNum];
+                Enemy3 newEnemy3 = new Enemy3(enemy3, temp);
+                enemy3.transform.tag = "Enemy";
+
+                numEnemies++;
+                Debug.Log("Enemy " + numEnemies + " of 15 spawned");
+
+                break;
+
+
+            default:
+                break;
+        }
+
+
     }
 
     private void CreatePaths()
@@ -234,16 +297,175 @@ public class GameManager : MonoBehaviour
     private void CreateEnemies()
     {
 
+        //redundant?
+
         for (int i = 0; i < enemies.Length; i++)
         {
             List<GameObject> temp = new List<GameObject>();
             float randomNum = UnityEngine.Random.Range(0, paths.Length);
             temp = paths[(int)randomNum];
 
-            Enemy newEnemy = new Enemy(enemyPrefab, temp);
+            Enemy newEnemy = new Enemy(enemyPrefab1, temp);
 
             enemies[i] = newEnemy;
         }
         
+    }
+
+    private void DifficultyCheck(Difficulty dif)
+    {
+        //adjust values for each game state
+
+        switch (dif)
+        {
+            case Difficulty.Easy:
+                spawnGroup = 1;
+                spawnInterval = 5;
+                enemyTypesToSpawn = 1;
+                break;
+
+            case Difficulty.Intermediate:
+                spawnGroup = 3;
+                spawnInterval = 5;
+                enemyTypesToSpawn = 2;
+                break;
+
+            case Difficulty.Hard:
+                spawnGroup = 3;
+                spawnInterval = 2;
+                enemyTypesToSpawn = 2;
+                break;
+
+            case Difficulty.Difficult:
+                spawnGroup = 3;
+                spawnInterval = 2;
+                enemyTypesToSpawn = 3;
+                break;
+
+            default:
+                spawnGroup = 1;
+                spawnInterval = 5;
+                enemyTypesToSpawn = 1;
+                break;
+        }
+    }
+
+    private float RandomNum(int min, int max)
+    {
+        float value = UnityEngine.Random.Range(min, max + 1);
+        return value;
+    }
+
+    #region COROUTINES
+    private IEnumerator spawnEasy()
+    {
+        //spawn only tier 1
+
+        while (numEnemies < 15)
+        {
+            new WaitForSeconds(spawnInterval);
+            SpawnEnemy(EnemyType.tier1);
+            numEnemies1++;
+            yield return null;
+        }
+
+    }
+
+    private IEnumerator spawnIntermediate()
+    {
+        //spawn tier 1 and 2
+
+        while ((numEnemies1 + numEnemies2) < 30)
+        {
+            float val = RandomNum(1, 2);
+            new WaitForSeconds(spawnInterval);
+
+            if (val == 1)
+            {
+                SpawnEnemy(EnemyType.tier1);
+                numEnemies1++;
+            }
+
+            else
+            {
+                SpawnEnemy(EnemyType.tier2);
+                numEnemies2++;
+            }
+
+            yield return null;
+        }
+
+    }
+
+    private IEnumerator spawnHard()
+    {
+        //spawn tier 1 and 2
+
+        while ((numEnemies1 + numEnemies2) < 50)
+        {
+            float val = RandomNum(1, 2);
+            new WaitForSeconds(spawnInterval);
+
+            if (val == 1)
+            {
+                SpawnEnemy(EnemyType.tier1);
+                numEnemies1++;
+            }
+
+            else
+            {
+                SpawnEnemy(EnemyType.tier2);
+                numEnemies2++;
+            }
+
+            yield return null;
+        }
+
+    }
+
+    private IEnumerator spawnDifficult()
+    {
+        //spawn all tiers
+
+        while ((numEnemies1 + numEnemies2 + numEnemies3) < 60)
+        {
+            float val = RandomNum(1, 3);
+            new WaitForSeconds(spawnInterval);
+
+            if (val == 1)
+            {
+                SpawnEnemy(EnemyType.tier1);
+                numEnemies1++;
+            }
+
+            else if (val == 2)
+            {
+                SpawnEnemy(EnemyType.tier2);
+                numEnemies2++;
+            }
+
+            else
+            {
+                SpawnEnemy(EnemyType.tier3);
+                numEnemies3++;
+            }
+
+            yield return null;
+        }
+    }
+    #endregion
+
+    private void GameStateManager()
+    {
+        //start coroutines
+        //stop coroutines
+        //check enemies being spawned
+        //change game state when parameters are met:
+        //  --> intermediate starts when the player has killed all the tier 1 enemies
+        //  --> hard starts when the player has killed all the tier 1 and 2 enemies
+        //  --> difficult will ONLY start if the tower is >75 health and all remaining enemies have been killed
+
+
+
     }
 }

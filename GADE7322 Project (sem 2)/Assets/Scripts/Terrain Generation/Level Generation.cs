@@ -27,7 +27,8 @@ public class LevelGeneration : MonoBehaviour
     public GameObject[] tiles = new GameObject[9]; //change manually !!
     public List<float[,]> heightMaps = new List<float[,]>();
     private List<Vector3[]> newVertices = new List<Vector3[]>();
-    public Vector3[] vertices = new Vector3[121 * 9];
+    private Vector3[] vertices = new Vector3[121 * 9];
+    public GameObject[] vertexObjects = new GameObject[121 * 9];
 
     void Start()
     {
@@ -35,6 +36,10 @@ public class LevelGeneration : MonoBehaviour
         GenerateLevel();
 
         GenerateVertices();
+        CreatePathingObjects();
+
+        GenerateSpawnPoints();
+        Debug.Log("Level generated");
     }
 
     private void GenerateLevel()
@@ -59,9 +64,6 @@ public class LevelGeneration : MonoBehaviour
                 x++;
             }
         }
-
-        GenerateSpawnPoints();
-        Debug.Log("Level generated");
     }
 
     private Wave[] GenerateSeeds()
@@ -91,7 +93,6 @@ public class LevelGeneration : MonoBehaviour
         return gameSeeds;
     }
 
-    //Enemy Spawning
     private void GenerateSpawnPoints() //generate enemy spawns
     {
         int i = 0;
@@ -140,6 +141,21 @@ public class LevelGeneration : MonoBehaviour
         }
 
         return posVector;
+    }
+
+    private void CreatePathingObjects()
+    {
+        int index = 0;
+
+        foreach (Vector3 position in vertices)
+        {
+            vertexObjects[index] = new GameObject();
+            vertexObjects[index].transform.position = position;
+            vertexObjects[index].tag = "Vertex";
+            vertexObjects[index].name = "Vertex " + index.ToString();
+
+            index++;
+        }
     }
 
     private void GenerateVertices()
@@ -312,10 +328,13 @@ public class LevelGeneration : MonoBehaviour
         {
             for (int j = 0; j < 121; j++)
             {
-                Debug.Log(p);
 
                 Vector3[] temp2 = newVertices[i];
-                vertices[p] = temp2[j]; //index issues ??
+
+                //Debug.Log(p);
+                //Debug.Log(temp2[j]);
+
+                vertices[p] = temp2[j];
                 p++;
             }
         }
