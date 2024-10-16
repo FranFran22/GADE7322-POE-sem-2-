@@ -8,7 +8,7 @@ public class Defender3 : Unit
     {
         health = 150;
         damage = 50;
-        speed = 4f;
+        speed = 3.5f;
         prefab = obj;
         range = 3f;
     }

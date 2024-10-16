@@ -25,6 +25,7 @@ public class TowerPlacement : MonoBehaviour
     private void Start()
     {
         clicked = false;
+        GM.canSpawn = true;
     }
 
     private void Update()

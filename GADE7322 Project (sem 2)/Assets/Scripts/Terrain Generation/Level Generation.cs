@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Xml.Schema;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class LevelGeneration : MonoBehaviour
 {
@@ -36,7 +38,6 @@ public class LevelGeneration : MonoBehaviour
         GenerateLevel();
 
         GenerateVertices();
-        CreatePathingObjects();
 
         GenerateSpawnPoints();
         Debug.Log("Level generated");
@@ -58,7 +59,7 @@ public class LevelGeneration : MonoBehaviour
                 Vector3 tilePosition = new Vector3(this.gameObject.transform.position.x + i * tileX, this.gameObject.transform.position.y, this.gameObject.transform.position.z + j * tileZ);
                 GameObject tile = Instantiate(tilePrefab, tilePosition, Quaternion.identity);
 
-                Debug.Log("spawned tile " + i + j);
+                //Debug.Log("spawned tile " + i + j);
 
                 tiles[x] = tile;
                 x++;
@@ -109,53 +110,28 @@ public class LevelGeneration : MonoBehaviour
 
     private Vector3 GeneratePosition()
     {
-        Vector3 posVector;
-        float rndmNum;
-        float randm = UnityEngine.Random.Range(0, 4);
+        List<Vector3> spawnPositions = new List<Vector3>();
+        Vector3 posVector = Vector3.zero;
+
+        foreach (GameObject obj in vertexObjects)
+        {
+            if ((obj.transform.position.z == 25) || (obj.transform.position.z == -5) || (obj.transform.position.x == 25) || (obj.transform.position.x == -5))
+            {
+                spawnPositions.Add(obj.transform.position);
+            }
+        }
+
+        float rndmNum = UnityEngine.Random.Range(0, spawnPositions.Count);
+        List<Vector3> shuffled = spawnPositions.OrderBy(_ => rndmNum).ToList();
+
+        for (int i = 0; i < 3; i++)
+        {
+            float randm = UnityEngine.Random.Range(0, spawnPositions.Count);
+            posVector = spawnPositions[(int)randm];
+
+        }
         
-        switch (randm)
-        {
-            case 0: //left edge
-                rndmNum = UnityEngine.Random.Range(-5, 26);
-                posVector = new Vector3(rndmNum, 0.1f, 25);
-                break;
-
-            case 1: // top edge
-                rndmNum = UnityEngine.Random.Range(-5, 26);
-                posVector = new Vector3(25, 0.1f, rndmNum);
-                break;
-
-            case 2: // right edge
-                rndmNum = UnityEngine.Random.Range(-5, 26);
-                posVector = new Vector3(rndmNum, 0.1f, -5);
-                break;
-
-            case 3: // bottom edge
-                rndmNum = UnityEngine.Random.Range(-5, 26);
-                posVector = new Vector3(-5, 0.1f, rndmNum);
-                break;
-
-            default:
-                posVector = Vector3.zero;
-                break;
-        }
-
         return posVector;
-    }
-
-    private void CreatePathingObjects()
-    {
-        int index = 0;
-
-        foreach (Vector3 position in vertices)
-        {
-            vertexObjects[index] = new GameObject();
-            vertexObjects[index].transform.position = position;
-            vertexObjects[index].tag = "Vertex";
-            vertexObjects[index].name = "Vertex " + index.ToString();
-
-            index++;
-        }
     }
 
     private void GenerateVertices()
@@ -193,7 +169,7 @@ public class LevelGeneration : MonoBehaviour
                         
                     }
                     newVertices.Add(nVertices);
-                    Debug.Log("tile 0's vertices corrected");
+                   // Debug.Log("tile 0's vertices corrected");
                     break;
 
                 case 1:
@@ -208,7 +184,7 @@ public class LevelGeneration : MonoBehaviour
 
                     }
                     newVertices.Add(nVertices);
-                    Debug.Log("tile 1's vertices corrected");
+                    //Debug.Log("tile 1's vertices corrected");
                     break;
 
                 case 2:
@@ -223,7 +199,7 @@ public class LevelGeneration : MonoBehaviour
 
                     }
                     newVertices.Add(nVertices);
-                    Debug.Log("tile 2's vertices corrected");
+                    //Debug.Log("tile 2's vertices corrected");
                     break;
 
                 case 3:
@@ -238,7 +214,7 @@ public class LevelGeneration : MonoBehaviour
 
                     }
                     newVertices.Add(nVertices);
-                    Debug.Log("tile 3's vertices corrected");
+                    //Debug.Log("tile 3's vertices corrected");
                     break;
 
                 case 4:
@@ -253,7 +229,7 @@ public class LevelGeneration : MonoBehaviour
 
                     }
                     newVertices.Add(nVertices);
-                    Debug.Log("tile 4's vertices corrected");
+                    //Debug.Log("tile 4's vertices corrected");
                     break;
 
                 case 5:
@@ -268,7 +244,7 @@ public class LevelGeneration : MonoBehaviour
 
                     }
                     newVertices.Add(nVertices);
-                    Debug.Log("tile 5's vertices corrected");
+                    //Debug.Log("tile 5's vertices corrected");
                     break;
 
                 case 6:
@@ -283,7 +259,7 @@ public class LevelGeneration : MonoBehaviour
 
                     }
                     newVertices.Add(nVertices);
-                    Debug.Log("tile 6's vertices corrected");
+                    //Debug.Log("tile 6's vertices corrected");
                     break;
 
                 case 7:
@@ -298,7 +274,7 @@ public class LevelGeneration : MonoBehaviour
 
                     }
                     newVertices.Add(nVertices);
-                    Debug.Log("tile 7's vertices corrected");
+                    //Debug.Log("tile 7's vertices corrected");
                     break;
 
                 case 8:
@@ -313,7 +289,7 @@ public class LevelGeneration : MonoBehaviour
 
                     }
                     newVertices.Add(nVertices);
-                    Debug.Log("tile 8's vertices corrected");
+                    //Debug.Log("tile 8's vertices corrected");
                     break;
 
                 default:
@@ -335,11 +311,26 @@ public class LevelGeneration : MonoBehaviour
                 //Debug.Log(temp2[j]);
 
                 vertices[p] = temp2[j];
+
+                //create a gameobject for the position
+                vertexObjects[p] = new GameObject();
+                vertexObjects[p].transform.position = vertices[p];
+                vertexObjects[p].tag = "Vertex";
+                vertexObjects[p].name = "Vertex " + p.ToString();
+
+                vertexObjects[p].transform.AddComponent<BoxCollider>();
+                BoxCollider c = vertexObjects[p].transform.GetComponent<BoxCollider>();
+                c.size = new Vector3(0.2f, 0.2f, 0.2f);
+                c.isTrigger = true;
+
+                //Debug.Log("vertex object " + p + " created");
+
                 p++;
             }
         }
 
-        Debug.Log("all vertices assigned");
+        //Debug.Log("all vertices assigned");
+        Debug.Log(vertexObjects.Length);
     }
 
 }

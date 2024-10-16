@@ -7,7 +7,13 @@ using UnityEngine.UIElements;
 public class DefenderPlacement : MonoBehaviour
 {
     [SerializeField]
-    private GameObject defenderPrefab;
+    private GameObject defender1Prefab;
+
+    [SerializeField]
+    private GameObject defender2Prefab;
+
+    [SerializeField]
+    private GameObject defender3Prefab;
 
     [SerializeField]
     private GameManager GM;
@@ -58,7 +64,7 @@ public class DefenderPlacement : MonoBehaviour
             {
                 Vector3 position = defenderSpawns[RandomNum(defenderSpawns.Length)].transform.position;
 
-                placeableObject = Instantiate(defenderPrefab, position, Quaternion.identity);
+                placeableObject = Instantiate(RandomPrefab(), position, Quaternion.identity);
                 defenderCount++;
             }
 
@@ -101,5 +107,31 @@ public class DefenderPlacement : MonoBehaviour
         float x = Random.Range(0, range);
         return (int) x;
     }  
+
+    private GameObject RandomPrefab()
+    {
+        float x = RandomNum(3);
+        GameObject prefab = new GameObject();
+
+        switch(x)
+        {
+            case 0:
+                prefab = defender1Prefab;
+                break;
+
+            case 1:
+                prefab = defender2Prefab;
+                break;
+
+            case 2:
+                prefab = defender3Prefab;
+                break;
+
+            default:
+                break;
+        }
+
+        return prefab;
+    }
    
 }
