@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,15 +10,23 @@ public class EnemyController : MonoBehaviour
 {
     [SerializeField]
     private Vector3 targetLocation;
-    [SerializeField]
-    private List<GameObject> waypoints = new List<GameObject>();
 
-    public Enemy enemy;
+    [SerializeField]
+    //private List<GameObject> waypoints = new List<GameObject>();
+
+    public List<Vector3> pathLocations = new List<Vector3>();
+    private GameObject[] vertices;
+    private Vector3 currentPos;
+    private int posIndex;
+    private int enemyIndex;
+
+    public Unit enemy;
     public GameManager GM;
     private GameObject tower;
     private float speed;
     private Tower towerUnit;
-    private Defender targetDefender;
+    private Unit targetDefender;
+    private GameObject[] defenders;
 
     public bool inRange;
     public int maxHealth;
@@ -34,30 +44,30 @@ public class EnemyController : MonoBehaviour
 
     void Start()
     {
-        //Get values from GameManager:
+        //Inititalisation
         GameObject obj = GameObject.Find("Game Manager");
         meshR = gameObject.GetComponent<MeshRenderer>();
-
         GM = obj.GetComponent<GameManager>();
-        enemy = GM.enemies[(int)RandomNum(GM.enemies.Length)];
+        enemyIndex = (int)RandomNum(GM.tier1Enemies.Count);
+        enemy = GM.tier1Enemies[enemyIndex];
         tower = GM.tower;
-
-        defaultMaterial = GM.enemyDefaultMaterial;
-        damagedMaterial = GM.enemyDamagedMaterial;
-
         TowerController TC = tower.GetComponent<TowerController>();
         towerUnit = TC.towerUnit;
-
-        //targetDefender = --> need to assign this when near a defender
-
-        waypoints = enemy.waypointList;
         speed = enemy.speed;
-        targetLocation = waypoints[0].transform.position;
+        inRange = false;
+        posIndex = 1;
 
+        //pathing
+        pathLocations = FindPath();
+        targetLocation = pathLocations[0];
+        currentPos = gameObject.transform.position;
+
+        //find defenders
+        defenders = GameObject.FindGameObjectsWithTag("Defender");
+
+        //initialise health
         maxHealth = enemy.health;
         currentHealth = maxHealth;
-
-        inRange = false;
 
         //initialise health bar
         healthBar = gameObject.GetComponent<HealthBar>();
@@ -72,42 +82,58 @@ public class EnemyController : MonoBehaviour
     {
         //when damaged --> change material for a small amount of time
         //if (takingDamage == true)
-            //StartCoroutine(ShowAttack());
+        //StartCoroutine(ShowAttack());
 
         //movement
         float step = speed * Time.deltaTime;
-        gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, targetLocation, step);
+        currentPos = Vector3.MoveTowards(currentPos, targetLocation, step);
+        gameObject.transform.position = currentPos;
 
+        if (Vector3.Distance(targetLocation, currentPos) < 0.01f)
+        {
+            Debug.Log(posIndex);
+
+            if (posIndex < pathLocations.Count)
+            {
+                targetLocation = pathLocations[posIndex];
+                posIndex++;
+            }
+
+            else
+                targetLocation = tower.transform.position;
+            
+        }
+
+
+        if (defenders != null)
+        {
+            targetDefender = FindDefender();
+            Attack("Defender");
+        }
+        
         if (inRange == true && healthBar.currentHealth <= 0)
         {
-            Debug.Log("Enemey destroyed!");
+            Debug.Log("Enemy destroyed!");
+
+            float n = RandomNum(GM.tier1Enemies.Count);
+            GM.tier1Enemies.RemoveAt((int)n);
             Destroy(gameObject);
         }
     }
 
     private float RandomNum(int range)
     {
-        float r = Random.Range(0, range);
+        float r = UnityEngine.Random.Range(0, range);
         return r;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Waypoint")
+        if (other.tag == "Vertex")
         {
             inRange = true;
 
-            int index = 0;
-            foreach (GameObject item in waypoints)
-            {
-                if (other.gameObject == item && index < waypoints.Count)
-                    targetLocation = waypoints[index + 1].transform.position;
-
-                if (item == waypoints[waypoints.Count - 1])
-                    targetLocation = tower.transform.position;
-
-                index++;
-            }
+            Debug.Log("Hit vertex");
         }
 
         if (other.tag == "Tower")
@@ -116,13 +142,15 @@ public class EnemyController : MonoBehaviour
             targetLocation = tower.transform.position;
             speed = 0;
 
+            GM.phaseTwo = true;
+
             Rigidbody RB = gameObject.GetComponent<Rigidbody>();
             RB.constraints = RigidbodyConstraints.FreezePosition;
 
             //attack tower
             //Attack(other.tag);
             StartCoroutine(AttackTower());
-            
+
         }
     }
 
@@ -145,6 +173,54 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    private List<Vector3> FindPath()
+    {
+        LevelGeneration LG = GM.GetComponent<LevelGeneration>();
+        vertices = LG.vertexObjects;
+
+        List<Vector3> positions = new List<Vector3>();
+        Vector3 currentVertex = gameObject.transform.position;
+        int index = 0;
+        float distance = 1.414f;
+        float distToTower = 0;
+
+        foreach (GameObject vertex in vertices)
+        {
+            // is this vertex next to me ?
+            // is this vertex position closer to the tower?
+            // is this vertex position below 0.7 on the map
+
+            distToTower = Vector3.Distance(tower.transform.position, currentVertex);
+
+            //Debug.Log(index);
+
+            if (index > 0 && positions.Count > 1)
+            {
+                //Debug.Log(positions.Count);
+                currentVertex = positions[positions.Count - 1];
+                distToTower = Vector3.Distance(tower.transform.position, positions[positions.Count - 1]);
+            }
+
+            if (Vector3.Distance(tower.transform.position, vertex.transform.position) < distToTower)
+            {
+                if (Vector3.Distance(vertex.transform.position, currentVertex) <= distance)
+                {
+                    if (vertex.transform.position.y < 0.7)
+                    {
+                        positions.Add(vertex.transform.position);
+                    }
+                }
+            }
+
+            index++;
+
+            if (distToTower <= 3)
+                break;
+        }
+
+        return positions;
+    }
+
     private IEnumerator AttackTower()
     {
         HealthBar towerHB = tower.GetComponent<HealthBar>();
@@ -158,33 +234,42 @@ public class EnemyController : MonoBehaviour
 
     private IEnumerator AttackDefender()
     {
-        yield return new WaitForSeconds(2);
-        targetDefender.health = targetDefender.health - enemy.damage;
-        Debug.Log("Enemy attacked defender");
+        if (targetDefender != null)
+        {
+            yield return new WaitForSeconds(2);
+            targetDefender.health = targetDefender.health - enemy.damage;
+            Debug.Log("Enemy attacked defender");
+        }   
     }
 
     private Defender FindDefender()
     {
-        float distance;
-        List<Defender> closeDefenders = new List<Defender>();
-
-        foreach (Defender defender in GM.defenders)
+        if (GM.defenders != null)
         {
-            distance = Vector3.Distance(defender.prefab.transform.position, gameObject.transform.position);
+            float distance;
+            List<Defender> closeDefenders = new List<Defender>();
 
-            if (distance < 4)
-                closeDefenders.Add(defender);
+            foreach (Defender defender in GM.defenders)
+            {
+                distance = Vector3.Distance(defender.prefab.transform.position, gameObject.transform.position);
+
+                if (distance < 4)
+                    closeDefenders.Add(defender);
+            }
+
+            float x = RandomNum(closeDefenders.Count);
+            return closeDefenders[(int)x];
         }
 
-        float x = RandomNum(closeDefenders.Count);
-        return closeDefenders[(int) x];
+        else
+            return null;
     }
 
     private IEnumerator ShowAttack()
     {
         yield return new WaitUntil(() => takingDamage == true);
         yield return new WaitForSecondsRealtime(2);
-        
+
         meshR.material = damagedMaterial;
 
         yield return new WaitForSecondsRealtime(1);
@@ -194,4 +279,5 @@ public class EnemyController : MonoBehaviour
 
         Debug.Log("Enemy took damage from tower");
     }
+
 }

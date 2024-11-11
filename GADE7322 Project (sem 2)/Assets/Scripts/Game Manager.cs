@@ -21,13 +21,7 @@ public class GameManager : MonoBehaviour
     private GameObject enemyTarget;
 
     [SerializeField]
-    private GameObject enemyPrefab;
-
-    [SerializeField]
-    public Material enemyDefaultMaterial;
-
-    [SerializeField]
-    public Material enemyDamagedMaterial;
+    private GameObject enemyPrefab1, enemyPrefab2, enemyPrefab3;
 
     [SerializeField]
     public GameObject[] vertexArray;
@@ -41,23 +35,45 @@ public class GameManager : MonoBehaviour
     public Defender[] defenders;
 
     private GameObject[] enemySpawnPoints;
-    public Enemy[] enemies = new Enemy[15];
+    //public Unit[] enemies = new Unit[15]; //need to remove
     public List<GameObject>[] paths = new List<GameObject>[3];
     public GameObject tower;
     #endregion
 
+    #region ENEMIES
+    [SerializeField]
+    public List<Enemy> tier1Enemies = new List<Enemy>();
+    [SerializeField]
+    public List<Enemy2> tier2Enemies = new List<Enemy2>();
+    [SerializeField]
+    public List<Enemy3> tier3Enemies = new List<Enemy3>();
+    #endregion
+
     public bool towerPlaced;
     private float timer;
-    private float timeDuration = 90;
+    private float timeDuration = 0;
 
     [SerializeField]
-    private bool canSpawn;
+    public bool canSpawn;
 
     public bool pathsCreated;
     private int numEnemies;
     public int towerHealth;
     public bool gameOver;
     public bool phaseTwo;
+    public bool phaseThree;
+    public bool phaseFour;
+
+    private int spawnInterval;
+    private int spawnGroup;
+    private int enemyTypesToSpawn;
+    private int numEnemies1, numEnemies2, numEnemies3;
+
+    public enum Difficulty { Easy, Intermediate, Hard, Difficult  };
+    public Difficulty difficulty;
+
+    private enum EnemyType { tier1, tier2, tier3 };
+    private EnemyType enemyType;
 
     #region TIMER OBJECTS
     [SerializeField]
@@ -87,69 +103,45 @@ public class GameManager : MonoBehaviour
         ResetTimer();
         towerPlaced = false;
         pathsCreated = false;
+
         numEnemies = 0;
+        numEnemies1 = 0;
+        numEnemies2 = 0;
+        numEnemies3 = 0;
+
         canSpawn = false;
         gameOver = false;
         phaseTwo = false;
+        difficulty = Difficulty.Easy;
 
         LevelGeneration LG = gameObject.GetComponent<LevelGeneration>();
         enemySpawnPoints = LevelGeneration.enemySpawns;
     }
 
 
-    void Update()
+    void Update() 
     {
-        timer -= Time.deltaTime; //countdown
+        timer += Time.deltaTime; 
         UpdateTimerDisplay(timer);
         tower = GameObject.FindGameObjectWithTag("Tower");
 
+        DifficultyCheck(difficulty);
+        
         //Tower Checks
         if (tower != null)
         {
             towerPlaced = true;
-            canSpawn = true;
 
-            if (pathsCreated == false)
-            {
-                Debug.Log("Creating paths ...");
-                CreatePaths();
-                CreateEnemies();
-                pathsCreated = true;
-            }     
-        }
-        
-        if (towerPlaced == true)
-        {
-            timeDuration = 120;
+            GameStateManager(difficulty);
+            //timeDuration = 180;
             TowerController TC = tower.GetComponent<TowerController>();
             towerHealth = TC.currentHealth;
-        }
 
-        //check tower health value
-        
-        if (towerHealth <= 0 && phaseTwo == true)
-        {
-            gameOver = true;
-            GameOverCanvas.SetActive(true);
-        }
-            
-
-        if (numEnemies > 15)
-            canSpawn = false;
-
-        // this code needs to spawn the enemies in intervals (not all at once)
-        if (canSpawn)
-        {
-            
-            float time = Mathf.FloorToInt(timer % 5);
-            //Debug.Log(time);
-
-            if (time == 0 && numEnemies < 16)
+            //check tower health value
+            if (towerHealth <= 0 && phaseTwo == true)
             {
-                //Debug.Log("Enemy spawned");
-                phaseTwo = true;
-                SpawnEnemy();
-                numEnemies++;
+                gameOver = true;
+                GameOverCanvas.SetActive(true);
             }
         }
     }
@@ -178,72 +170,288 @@ public class GameManager : MonoBehaviour
         return array[(int)x];
     }
 
-    private void SpawnEnemy()
+    private void SpawnEnemy(EnemyType type)
     {
-        GameObject enemy = Instantiate(enemyPrefab, RandomSpawnPoint(enemySpawnPoints).transform.position, Quaternion.identity);
-        enemy.transform.tag = "Enemy";
+        List<GameObject> temp = new List<GameObject>();
+        float randomNum;
 
-        Debug.Log("Enemy " + numEnemies + " of 15 spawned");
+        switch (type)
+        {
+            case EnemyType.tier1:
+                GameObject enemy1 = Instantiate(enemyPrefab1, RandomSpawnPoint(enemySpawnPoints).transform.position, Quaternion.identity);
+
+                //create enemy object
+                randomNum = UnityEngine.Random.Range(0, paths.Length);
+                temp = paths[(int)randomNum];
+                Enemy newEnemy = new Enemy(enemy1, temp);
+                enemy1.transform.tag = "Enemy";
+
+                tier1Enemies.Add(newEnemy);
+
+                numEnemies1++;
+                numEnemies++;
+                Debug.Log("Enemy " + numEnemies + " of 15 spawned");
+
+                break;
+
+
+            case EnemyType.tier2:
+                GameObject enemy2 = Instantiate(enemyPrefab2, RandomSpawnPoint(enemySpawnPoints).transform.position, Quaternion.identity);
+
+                //create enemy object
+                randomNum = UnityEngine.Random.Range(0, paths.Length);
+                temp = paths[(int)randomNum];
+                Enemy2 newEnemy2 = new Enemy2(enemy2, temp);
+                enemy2.transform.tag = "Enemy";
+
+                tier2Enemies.Add(newEnemy2);
+
+                numEnemies2++;
+                numEnemies++;
+                Debug.Log("Enemy " + numEnemies + " of 15 spawned");
+
+                break;
+
+
+            case EnemyType.tier3:
+                GameObject enemy3 = Instantiate(enemyPrefab3, RandomSpawnPoint(enemySpawnPoints).transform.position, Quaternion.identity);
+
+                //create enemy object
+                randomNum = UnityEngine.Random.Range(0, paths.Length);
+                temp = paths[(int)randomNum];
+                Enemy3 newEnemy3 = new Enemy3(enemy3, temp);
+                enemy3.transform.tag = "Enemy";
+
+                tier3Enemies.Add(newEnemy3);
+
+                numEnemies3++;
+                numEnemies++;
+                Debug.Log("Enemy " + numEnemies + " of 15 spawned");
+
+                break;
+
+
+            default:
+                break;
+        }
+
+
     }
 
-    private void CreatePaths()
+    private void DifficultyCheck(Difficulty dif)
     {
-        Vector3 startPosition;
-        Vector3 endPosition;
-        float posX = 0;
-        float posZ = 0;
+        //adjust values for each game state
 
-        int i = 0; //path index
-        foreach (GameObject spawn in enemySpawnPoints)
+        switch (dif)
         {
-            List<GameObject> holder = new List<GameObject>(); //creates a new list to store the pathing waypoints
-            startPosition = spawn.transform.position;
-            endPosition = new Vector3(tower.transform.position.x-2, tower.transform.position.y, tower.transform.position.z-2);
+            case Difficulty.Easy:
+                spawnGroup = 1;
+                spawnInterval = 5;
+                enemyTypesToSpawn = 1;
+                break;
 
-            for (int x = 0; x < 5; x++) //generate the waypoints
+            case Difficulty.Intermediate:
+                spawnGroup = 3;
+                spawnInterval = 5;
+                enemyTypesToSpawn = 2;
+                break;
+
+            case Difficulty.Hard:
+                spawnGroup = 3;
+                spawnInterval = 2;
+                enemyTypesToSpawn = 2;
+                break;
+
+            case Difficulty.Difficult:
+                spawnGroup = 3;
+                spawnInterval = 2;
+                enemyTypesToSpawn = 3;
+                break;
+
+            default:
+                spawnGroup = 1;
+                spawnInterval = 5;
+                enemyTypesToSpawn = 1;
+                break;
+        }
+    }
+
+    private float RandomNum(int min, int max)
+    {
+        float value = UnityEngine.Random.Range(min, max + 1);
+        return value;
+    }
+
+    #region COROUTINES
+    private IEnumerator spawnEasy()
+    {
+        //spawn only tier 1
+
+        while (numEnemies1 < 15)
+        {
+            yield return new WaitForSeconds(spawnInterval);
+            SpawnEnemy(EnemyType.tier1);
+            numEnemies1++;
+            Debug.Log(numEnemies1);
+        }
+
+    }
+
+    private IEnumerator spawnIntermediate()
+    {
+        //spawn tier 1 and 2
+
+        while ((numEnemies1 + numEnemies2) < 30)
+        {
+            for (int i = 0; i < spawnGroup; i++)
             {
-                if (x > 0)
-                    startPosition = holder[x - 1].transform.position;
+                float val = RandomNum(1, 2);
+                yield return new WaitForSeconds(spawnInterval);
 
-                posX = UnityEngine.Random.Range(startPosition.x, endPosition.x);
-                posZ = UnityEngine.Random.Range(startPosition.z, endPosition.z);
+                if (val == 1)
+                {
+                    SpawnEnemy(EnemyType.tier1);
+                    numEnemies1++;
+                }
 
-                GameObject temp = new GameObject();
-                temp.transform.position = new Vector3(posX, spawn.transform.position.y, posZ);
-
-                temp.transform.AddComponent<BoxCollider>();
-                BoxCollider c = temp.transform.GetComponent<BoxCollider>();
-                c.size = new Vector3(0.1f, 0.1f, 0.1f);
-
-                c.isTrigger = true;
-                temp.transform.tag = "Waypoint";
-
-                holder.Add(temp);
+                else
+                {
+                    SpawnEnemy(EnemyType.tier2);
+                    numEnemies2++;
+                }
             }
 
-            //Debug.Log(holder.Count);
-
-            paths[i] = new List<GameObject>();
-            paths[i].AddRange(holder);
-            i++;
         }
 
-        pathsCreated = true;
     }
 
-    private void CreateEnemies()
+    private IEnumerator spawnHard()
     {
+        //spawn tier 1 and 2
 
-        for (int i = 0; i < enemies.Length; i++)
+        while ((numEnemies1 + numEnemies2) < 50)
         {
-            List<GameObject> temp = new List<GameObject>();
-            float randomNum = UnityEngine.Random.Range(0, paths.Length);
-            temp = paths[(int)randomNum];
+            float val = RandomNum(1, 2);
+            yield return new WaitForSeconds(spawnInterval);
 
-            Enemy newEnemy = new Enemy(enemyPrefab, temp);
+            if (val == 1)
+            {
+                SpawnEnemy(EnemyType.tier1);
+                numEnemies1++;
+            }
 
-            enemies[i] = newEnemy;
+            else
+            {
+                SpawnEnemy(EnemyType.tier2);
+                numEnemies2++;
+            }
+
         }
-        
+
+    }
+
+    private IEnumerator spawnDifficult()
+    {
+        //spawn all tiers
+
+        while ((numEnemies1 + numEnemies2 + numEnemies3) < 60)
+        {
+            float val = RandomNum(1, 3);
+            yield return new WaitForSeconds(spawnInterval);
+
+            if (val == 1)
+            {
+                SpawnEnemy(EnemyType.tier1);
+                numEnemies1++;
+            }
+
+            else if (val == 2)
+            {
+                SpawnEnemy(EnemyType.tier2);
+                numEnemies2++;
+            }
+
+            else
+            {
+                SpawnEnemy(EnemyType.tier3);
+                numEnemies3++;
+            }
+
+        }
+    }
+    #endregion
+
+    private void GameStateManager(Difficulty dif)
+    {
+        //start coroutines
+        //stop coroutines
+        //check enemies being spawned
+        //change game state when parameters are met:
+        //  --> intermediate starts when the player has killed all the tier 1 enemies
+        //  --> hard starts when the player has killed all the tier 1 and 2 enemies
+        //  --> difficult will ONLY start if the tower is >75 health and all remaining enemies have been killed
+
+        if (dif == Difficulty.Easy)
+        {
+            if (canSpawn)
+            {
+                StartCoroutine(spawnEasy());
+                Debug.Log("Tier 1 enemies spawning");
+                canSpawn = false;
+            }
+
+            //Debug.Log("Changed difficulty to: Easy");
+        }
+
+        if(tier1Enemies.Count == 0 && phaseTwo && dif == Difficulty.Easy)
+        {
+            StopCoroutine(spawnEasy());
+
+            difficulty = Difficulty.Intermediate;
+
+            if (phaseTwo)
+                canSpawn = true;
+
+            if (canSpawn)
+            {
+                StartCoroutine(spawnIntermediate());
+                Debug.Log("Tier 1 & 2 enemies spawning");
+                canSpawn = false;
+            }
+
+            //Debug.Log("Changed difficulty to: Intermediate");
+        }
+
+        if (tier1Enemies.Count == 0 && phaseThree && tier2Enemies.Count == 0 && dif == Difficulty.Intermediate)
+        {
+            StopCoroutine(spawnIntermediate());
+
+            difficulty = Difficulty.Hard;
+
+            if (canSpawn)
+            {
+                StartCoroutine(spawnHard());
+                Debug.Log("Tier 1 & 2 enemies spawning (2.0)");
+                canSpawn = false;
+            }
+
+            //Debug.Log("Changed difficulty to: Hard");
+        }
+
+        if (tier1Enemies.Count == 0 && phaseFour && tier2Enemies.Count == 0 && tier3Enemies.Count == 0 && dif == Difficulty.Hard)
+        {
+            StopCoroutine(spawnHard());
+
+            difficulty = Difficulty.Difficult;
+
+            if (canSpawn)
+            {
+                StartCoroutine(spawnDifficult());
+                Debug.Log("Tier 1, 2 and 3 enemies spawning");
+                canSpawn = false;
+            }
+
+            //Debug.Log("Changed difficulty to: Difficult");
+        }
     }
 }

@@ -7,6 +7,7 @@ public abstract class Unit
     public int health { get; set; }
     public int damage { get; set; }
     public float speed { get; set; }
+    public float range { get; set; }
     public GameObject prefab { get; set; }
 
 
@@ -16,5 +17,6 @@ public abstract class Unit
         this.damage = damage;
         this.speed = speed;
         this.prefab = prefab;
+        this.range = range;
     }
 }

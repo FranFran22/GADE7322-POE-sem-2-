@@ -111,6 +111,7 @@
 -define:ENABLE_UNITY_COLLECTIONS_CHECKS
 -define:ENABLE_BURST_AOT
 -define:UNITY_TEAM_LICENSE
+-define:UNITY_PRO_LICENSE
 -define:ENABLE_CUSTOM_RENDER_TEXTURE
 -define:ENABLE_DIRECTOR
 -define:ENABLE_LOCALIZATION
@@ -362,9 +363,17 @@
 "Assets/Scripts/Terrain Generation/Wave.cs"
 "Assets/Scripts/Tower Placement.cs"
 "Assets/Scripts/Units/Defender.cs"
+"Assets/Scripts/Units/Defender2.cs"
+"Assets/Scripts/Units/Defender3.cs"
 "Assets/Scripts/Units/DefenderController.cs"
+"Assets/Scripts/Units/DefenderController2.cs"
+"Assets/Scripts/Units/DefenderController3.cs"
 "Assets/Scripts/Units/Enemy.cs"
+"Assets/Scripts/Units/Enemy2.cs"
+"Assets/Scripts/Units/Enemy3.cs"
 "Assets/Scripts/Units/EnemyController.cs"
+"Assets/Scripts/Units/EnemyController2.cs"
+"Assets/Scripts/Units/EnemyController3.cs"
 "Assets/Scripts/Units/Tower.cs"
 "Assets/Scripts/Units/TowerController.cs"
 "Assets/Scripts/Units/Unit.cs"

@@ -15,7 +15,7 @@ public class TowerController : MonoBehaviour
     public Slider slider;
 
     [SerializeField]
-    public List<Enemy> enemiesInRange = new List<Enemy>();
+    public List<Unit> enemiesInRange = new List<Unit>();
 
 
     void Start()

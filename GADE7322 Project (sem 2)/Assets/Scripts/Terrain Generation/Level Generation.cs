@@ -1,7 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Xml.Schema;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class LevelGeneration : MonoBehaviour
 {
@@ -22,12 +27,20 @@ public class LevelGeneration : MonoBehaviour
     private static int numOfSpawns = 3;
     public static GameObject[] enemySpawns = new GameObject[numOfSpawns];
     public GameObject[] tiles = new GameObject[9]; //change manually !!
-
+    public List<float[,]> heightMaps = new List<float[,]>();
+    private List<Vector3[]> newVertices = new List<Vector3[]>();
+    private Vector3[] vertices = new Vector3[121 * 9];
+    public GameObject[] vertexObjects = new GameObject[121 * 9];
 
     void Start()
     {
         waveSeeds = GenerateSeeds();
         GenerateLevel();
+
+        GenerateVertices();
+
+        GenerateSpawnPoints();
+        Debug.Log("Level generated");
     }
 
     private void GenerateLevel()
@@ -46,13 +59,12 @@ public class LevelGeneration : MonoBehaviour
                 Vector3 tilePosition = new Vector3(this.gameObject.transform.position.x + i * tileX, this.gameObject.transform.position.y, this.gameObject.transform.position.z + j * tileZ);
                 GameObject tile = Instantiate(tilePrefab, tilePosition, Quaternion.identity);
 
+                //Debug.Log("spawned tile " + i + j);
+
                 tiles[x] = tile;
                 x++;
             }
         }
-
-        GenerateSpawnPoints();
-        Debug.Log("Level generated");
     }
 
     private Wave[] GenerateSeeds()
@@ -66,11 +78,11 @@ public class LevelGeneration : MonoBehaviour
             gameSeeds[i] = new Wave();
 
             //random frequency
-            float R = Random.Range(0, 3);
+            float R = UnityEngine.Random.Range(0, 3);
             gameSeeds[i].frequency = frequencies[(int)R];
 
             //random amplitude
-            float r = Random.Range(1, 6);
+            float r = UnityEngine.Random.Range(1, 6);
             gameSeeds[i].amplitude = r;
 
             gameSeeds[i].seed = seed;
@@ -82,7 +94,6 @@ public class LevelGeneration : MonoBehaviour
         return gameSeeds;
     }
 
-    //Enemy Spawning
     private void GenerateSpawnPoints() //generate enemy spawns
     {
         int i = 0;
@@ -99,38 +110,227 @@ public class LevelGeneration : MonoBehaviour
 
     private Vector3 GeneratePosition()
     {
-        Vector3 posVector;
-        float rndmNum;
-        float randm = Random.Range(0, 4);
-        
-        switch (randm)
+        List<Vector3> spawnPositions = new List<Vector3>();
+        Vector3 posVector = Vector3.zero;
+
+        foreach (GameObject obj in vertexObjects)
         {
-            case 0: //left edge
-                rndmNum = Random.Range(-5, 26);
-                posVector = new Vector3(rndmNum, 0.1f, 25);
-                break;
-
-            case 1: // top edge
-                rndmNum = Random.Range(-5, 26);
-                posVector = new Vector3(25, 0.1f, rndmNum);
-                break;
-
-            case 2: // right edge
-                rndmNum = Random.Range(-5, 26);
-                posVector = new Vector3(rndmNum, 0.1f, -5);
-                break;
-
-            case 3: // bottom edge
-                rndmNum = Random.Range(-5, 26);
-                posVector = new Vector3(-5, 0.1f, rndmNum);
-                break;
-
-            default:
-                posVector = Vector3.zero;
-                break;
+            if ((obj.transform.position.z == 25) || (obj.transform.position.z == -5) || (obj.transform.position.x == 25) || (obj.transform.position.x == -5))
+            {
+                spawnPositions.Add(obj.transform.position);
+            }
         }
 
+        float rndmNum = UnityEngine.Random.Range(0, spawnPositions.Count);
+        List<Vector3> shuffled = spawnPositions.OrderBy(_ => rndmNum).ToList();
+
+        for (int i = 0; i < 3; i++)
+        {
+            float randm = UnityEngine.Random.Range(0, spawnPositions.Count);
+            posVector = spawnPositions[(int)randm];
+
+        }
+        
         return posVector;
+    }
+
+    private void GenerateVertices()
+    {
+        //tile by tile, adjust the vertices
+
+        foreach (GameObject tile in tiles)
+        {
+            Mesh mesh = tile.GetComponent<MeshFilter>().mesh;
+            Vector3[] temp = mesh.vertices;
+            Vector3[] nVertices = new Vector3[121];
+
+
+            for (int i = 0; i < temp.Length; i++)
+            {
+                //convert vertex positions to world space
+                nVertices[i] = transform.TransformPoint(temp[i]);
+            }
+
+            TerrainGenerator TG = tile.GetComponent<TerrainGenerator>();
+            int index = Array.IndexOf(tiles, tile);
+            float[,] noise = TG.noiseArray;
+            int x = 0;
+
+            switch (index)
+            {
+                case 0:              
+                    for (int i = 0; i < 11; i++)
+                    {
+                        for (int j = 0; j < 11; j++)
+                        {
+                            nVertices[x].y = noise[i, j];
+                            x++;
+                        }
+                        
+                    }
+                    newVertices.Add(nVertices);
+                   // Debug.Log("tile 0's vertices corrected");
+                    break;
+
+                case 1:
+                    for (int i = 0; i < 11; i++)
+                    {
+                        for (int j = 0; j < 11; j++)
+                        {
+                            nVertices[x] = new Vector3(nVertices[x].x, noise[i, j], nVertices[x].z + 10);
+                            nVertices[x].y = noise[i, j];
+                            x++;
+                        }
+
+                    }
+                    newVertices.Add(nVertices);
+                    //Debug.Log("tile 1's vertices corrected");
+                    break;
+
+                case 2:
+                    for (int i = 0; i < 11; i++)
+                    {
+                        for (int j = 0; j < 11; j++)
+                        {
+                            nVertices[x] = new Vector3(nVertices[x].x, noise[i, j], nVertices[x].z + 20);
+                            nVertices[x].y = noise[i, j];
+                            x++;
+                        }
+
+                    }
+                    newVertices.Add(nVertices);
+                    //Debug.Log("tile 2's vertices corrected");
+                    break;
+
+                case 3:
+                    for (int i = 0; i < 11; i++)
+                    {
+                        for (int j = 0; j < 11; j++)
+                        {
+                            nVertices[x] = new Vector3(nVertices[x].x + 10, noise[i, j], nVertices[x].z);
+                            nVertices[x].y = noise[i, j];
+                            x++;
+                        }
+
+                    }
+                    newVertices.Add(nVertices);
+                    //Debug.Log("tile 3's vertices corrected");
+                    break;
+
+                case 4:
+                    for (int i = 0; i < 11; i++)
+                    {
+                        for (int j = 0; j < 11; j++)
+                        {
+                            nVertices[x] = new Vector3(nVertices[x].x + 10, noise[i, j], nVertices[x].z + 10);
+                            nVertices[x].y = noise[i, j];
+                            x++;
+                        }
+
+                    }
+                    newVertices.Add(nVertices);
+                    //Debug.Log("tile 4's vertices corrected");
+                    break;
+
+                case 5:
+                    for (int i = 0; i < 11; i++)
+                    {
+                        for (int j = 0; j < 11; j++)
+                        {
+                            nVertices[x] = new Vector3(nVertices[x].x + 10, noise[i, j], nVertices[x].z + 20);
+                            nVertices[x].y = noise[i, j];
+                            x++;
+                        }
+
+                    }
+                    newVertices.Add(nVertices);
+                    //Debug.Log("tile 5's vertices corrected");
+                    break;
+
+                case 6:
+                    for (int i = 0; i < 11; i++)
+                    {
+                        for (int j = 0; j < 11; j++)
+                        {
+                            nVertices[x] = new Vector3(nVertices[x].x + 20, noise[i, j], nVertices[x].z);
+                            nVertices[x].y = noise[i, j];
+                            x++;
+                        }
+
+                    }
+                    newVertices.Add(nVertices);
+                    //Debug.Log("tile 6's vertices corrected");
+                    break;
+
+                case 7:
+                    for (int i = 0; i < 11; i++)
+                    {
+                        for (int j = 0; j < 11; j++)
+                        {
+                            nVertices[x] = new Vector3(nVertices[x].x + 20, noise[i, j], nVertices[x].z + 10);
+                            nVertices[x].y = noise[i, j];
+                            x++;
+                        }
+
+                    }
+                    newVertices.Add(nVertices);
+                    //Debug.Log("tile 7's vertices corrected");
+                    break;
+
+                case 8:
+                    for (int i = 0; i < 11; i++)
+                    {
+                        for (int j = 0; j < 11; j++)
+                        {
+                            nVertices[x] = new Vector3(nVertices[x].x + 20, noise[i, j], nVertices[x].z + 20);
+                            nVertices[x].y = noise[i, j];
+                            x++;
+                        }
+
+                    }
+                    newVertices.Add(nVertices);
+                    //Debug.Log("tile 8's vertices corrected");
+                    break;
+
+                default:
+                    break;
+            }
+       
+        }
+
+        //assign vertices to an array
+        int p = 0;
+        for (int i = 0; i < newVertices.Count; i++)
+        {
+            for (int j = 0; j < 121; j++)
+            {
+
+                Vector3[] temp2 = newVertices[i];
+
+                //Debug.Log(p);
+                //Debug.Log(temp2[j]);
+
+                vertices[p] = temp2[j];
+
+                //create a gameobject for the position
+                vertexObjects[p] = new GameObject();
+                vertexObjects[p].transform.position = vertices[p];
+                vertexObjects[p].tag = "Vertex";
+                vertexObjects[p].name = "Vertex " + p.ToString();
+
+                vertexObjects[p].transform.AddComponent<BoxCollider>();
+                BoxCollider c = vertexObjects[p].transform.GetComponent<BoxCollider>();
+                c.size = new Vector3(0.2f, 0.2f, 0.2f);
+                c.isTrigger = true;
+
+                //Debug.Log("vertex object " + p + " created");
+
+                p++;
+            }
+        }
+
+        //Debug.Log("all vertices assigned");
+        Debug.Log(vertexObjects.Length);
     }
 
 }
