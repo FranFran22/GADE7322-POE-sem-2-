@@ -160,10 +160,10 @@ MonoBehaviour:
   GameOverCanvas: {fileID: 1326683467}
   vertexArray: []
   tower: {fileID: 0}
-  treeTrunk: {fileID: 919132149155446097, guid: 8e5e463b8ad3769499770f9f2174fbfa, type: 3}
-  tree1: {fileID: 919132149155446097, guid: 1efac32d53653d34aad05dbbb7730f41, type: 3}
-  tree2: {fileID: 919132149155446097, guid: 75cf544fe8e01ce4ba08ae45cafd5de9, type: 3}
-  treePine: {fileID: 919132149155446097, guid: de34bd26b33bf524b8645127f9ede927, type: 3}
+  treeTrunk: {fileID: 3584236962013358042, guid: 7b99fc6042f200f43a86688b92451fc7, type: 3}
+  tree1: {fileID: 7998785730555549025, guid: f4ef28f51e71f8a488142bf10230f119, type: 3}
+  tree2: {fileID: 5087240606766611638, guid: 5bcc03c14019c37448aee7a9933a9012, type: 3}
+  treePine: {fileID: 2729115495593341039, guid: e4e1a422bc555f649980d535b9df41e9, type: 3}
   lavender: {fileID: 1713206967108204987, guid: 4c3b5c8308e301841bfa38566b35496f, type: 3}
   mint: {fileID: 5213064216632702510, guid: bd636afeb16125b46bf6f8b5ae4fa890, type: 3}
   dandelion: {fileID: 6012747786178707443, guid: d25fd0b097cfdbd4886b811ba7ea861f, type: 3}
