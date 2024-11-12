@@ -157,17 +157,24 @@ MonoBehaviour:
   enemyPrefab1: {fileID: 1137209091045498742, guid: 150f3fcf29690f045b17e223e7a1ca54, type: 3}
   enemyPrefab2: {fileID: 1137209091045498742, guid: ba6800e9f2ba6144ab42766091663074, type: 3}
   enemyPrefab3: {fileID: 1137209091045498742, guid: 16bef2704e7ef5342a0fb3121f7b3353, type: 3}
-  enemyDefaultMaterial: {fileID: 2100000, guid: 63c2f1605b45d8649938ddea7500c2e1, type: 2}
-  enemyDamagedMaterial: {fileID: 2100000, guid: 638b0073e2553674284f41414159e766, type: 2}
-  vertexArray: []
   GameOverCanvas: {fileID: 1326683467}
+  vertexArray: []
   tower: {fileID: 0}
+  treeTrunk: {fileID: 919132149155446097, guid: 8e5e463b8ad3769499770f9f2174fbfa, type: 3}
+  tree1: {fileID: 919132149155446097, guid: 1efac32d53653d34aad05dbbb7730f41, type: 3}
+  tree2: {fileID: 919132149155446097, guid: 75cf544fe8e01ce4ba08ae45cafd5de9, type: 3}
+  treePine: {fileID: 919132149155446097, guid: de34bd26b33bf524b8645127f9ede927, type: 3}
+  lavender: {fileID: 1713206967108204987, guid: 4c3b5c8308e301841bfa38566b35496f, type: 3}
+  mint: {fileID: 5213064216632702510, guid: bd636afeb16125b46bf6f8b5ae4fa890, type: 3}
+  dandelion: {fileID: 6012747786178707443, guid: d25fd0b097cfdbd4886b811ba7ea861f, type: 3}
   towerPlaced: 0
   canSpawn: 0
   pathsCreated: 0
   towerHealth: 0
   gameOver: 0
   phaseTwo: 0
+  phaseThree: 0
+  phaseFour: 0
   difficulty: 0
   minute1: {fileID: 307248078}
   minute2: {fileID: 533857112}

@@ -17,14 +17,12 @@ using UnityEngine.UIElements;
 public class GameManager : MonoBehaviour
 {
     #region GAME OBJECTS
+    [Header("Game Objects")]
     [SerializeField]
     private GameObject enemyTarget;
 
     [SerializeField]
     private GameObject enemyPrefab1, enemyPrefab2, enemyPrefab3;
-
-    [SerializeField]
-    public GameObject[] vertexArray;
 
     [SerializeField]
     public Tower towerUnit;
@@ -33,11 +31,20 @@ public class GameManager : MonoBehaviour
     private GameObject GameOverCanvas;
 
     public Defender[] defenders;
-
+    public GameObject[] vertexArray;
     private GameObject[] enemySpawnPoints;
-    //public Unit[] enemies = new Unit[15]; //need to remove
     public List<GameObject>[] paths = new List<GameObject>[3];
     public GameObject tower;
+
+
+    [Header("Vegetation Assets")]
+    public GameObject treeTrunk;
+    public GameObject tree1;
+    public GameObject tree2;
+    public GameObject treePine;
+    public GameObject lavender;
+    public GameObject mint;
+    public GameObject dandelion;
     #endregion
 
     #region ENEMIES
@@ -49,6 +56,7 @@ public class GameManager : MonoBehaviour
     public List<Enemy3> tier3Enemies = new List<Enemy3>();
     #endregion
 
+    [Header("Booleans & Values")]
     public bool towerPlaced;
     private float timer;
     private float timeDuration = 0;
@@ -70,12 +78,14 @@ public class GameManager : MonoBehaviour
     private int numEnemies1, numEnemies2, numEnemies3;
 
     public enum Difficulty { Easy, Intermediate, Hard, Difficult  };
+    [Header("Enumerators")]
     public Difficulty difficulty;
 
     private enum EnemyType { tier1, tier2, tier3 };
     private EnemyType enemyType;
 
     #region TIMER OBJECTS
+    [Header("Timer Assets")]
     [SerializeField]
     private TextMeshProUGUI minute1;
 

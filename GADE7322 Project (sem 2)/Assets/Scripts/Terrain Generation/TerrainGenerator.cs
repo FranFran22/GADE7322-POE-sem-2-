@@ -28,9 +28,8 @@ public class TerrainGenerator : MonoBehaviour
     // unity3D mesh --> MeshFilter (on a GameObject) --> Meshrenderer
     // heightmap source is a function
 
-
+    #region GAME OBJECTS
     private static int size = 11;
-
     public float[,] noiseArray = new float[size, size];
     public static Vector3[] newVertices = new Vector3[size * size];
     private int scalingFactor = 3;
@@ -38,6 +37,7 @@ public class TerrainGenerator : MonoBehaviour
     private MeshRenderer mRenderer;
     private MeshFilter mFilter;
     private MeshCollider mCollider;
+    private GameManager GM;
 
     [SerializeField]
     private TerrainType[] terrainTypes;
@@ -48,17 +48,37 @@ public class TerrainGenerator : MonoBehaviour
     [SerializeField]
     private AnimationCurve heightCurve;
 
+    private enum Biome { Grassy, Elevated, Mountain};
+    private Biome biome;
+    #endregion
+
+    #region VEGETATION ASSETS
+    private GameObject pine;
+    private GameObject tree1;
+    private GameObject tree2;
+    private GameObject trunk;
+    private GameObject lavender;
+    private GameObject mint;
+    private GameObject dandelion;
+    #endregion
 
     void Start()
     {
+        //Initialisation
         mFilter = GetComponent<MeshFilter>();
         mCollider = GetComponent<MeshCollider>();
         mRenderer = GetComponent<MeshRenderer>();
-
         GetComponent<LevelGeneration>();
-        waves = LevelGeneration.waveSeeds;
 
+        GameObject obj = GameObject.Find("Game Manager");
+        GM = obj.GetComponent<GameManager>();
+
+        //spawn terrain
+        waves = LevelGeneration.waveSeeds;
         GenerateMesh();
+
+        //spawn vegetation
+        GetPrefabs();
     }
 
 
@@ -97,7 +117,6 @@ public class TerrainGenerator : MonoBehaviour
 
         return map;
     }
-
 
     private void GenerateMesh() //Tile generation
     {
@@ -180,4 +199,94 @@ public class TerrainGenerator : MonoBehaviour
         return terrainTypes[terrainTypes.Length - 1];
     }
 
+    #region VEGETATION SPAWNING
+    private void GetPrefabs()
+    {
+        trunk = GM.treeTrunk;
+        tree1 = GM.tree1;
+        tree2 = GM.tree2;
+        pine = GM.treePine;
+        dandelion = GM.dandelion;
+        mint = GM.mint;
+        lavender = GM.lavender;
+    }
+
+    private void SpawnFlowers(Vector3 position)
+    {
+        float num = RndNumGenerator(1, 3);
+
+        switch(num)
+        {
+            case 1:
+                Instantiate(lavender, position, Quaternion.identity);
+                break;
+
+            case 2:
+                Instantiate(dandelion, position, Quaternion.identity);
+                break;
+
+            case 3:
+                Instantiate(mint, position, Quaternion.identity);
+                break;
+
+            default:
+                break;
+        }
+
+    }
+    
+    private void SpawnTrees(Vector3 position, Biome biome)
+    {
+        switch(biome)
+        {
+            case Biome.Grassy:
+                //spawn no trees
+                break;
+
+            case Biome.Elevated:
+                //spawn any trees
+                break;
+
+            case Biome.Mountain:
+                //only spawn certain trees
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private void SpawnVegetation()
+    {
+        //assign biome type to vertices
+        foreach (Vector3 vertex in newVertices)
+        {
+            if (vertex.y <= 0.4f)
+            {
+                biome = Biome.Grassy;
+                //spawn grassy vegetation
+            } 
+            
+            else if (vertex.y > 0.4f && vertex.y < 0.7f)
+            {
+                biome = Biome.Elevated;
+                //spawn all vegetation
+            }
+
+            else if (vertex.y >= 0.7f)
+            {
+                biome = Biome.Mountain;
+                //spawn mountain vegetation
+            }
+        }
+    }
+
+
+    #endregion
+
+    private float RndNumGenerator(int min, int max)
+    {
+        float random = UnityEngine.Random.Range(min, max);
+        return random;
+    }
 }
