@@ -11,8 +11,6 @@ using static UnityEngine.EventSystems.EventTrigger;
 using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine.UIElements;
 
-// Game only starts when the tower is placed
-// Player will have 30 seconds to place the tower, otherwise it will be randomly spawned
 
 public class GameManager : MonoBehaviour
 {

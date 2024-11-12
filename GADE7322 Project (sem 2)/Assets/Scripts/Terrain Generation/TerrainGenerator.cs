@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 
 [System.Serializable]
@@ -79,6 +80,7 @@ public class TerrainGenerator : MonoBehaviour
 
         //spawn vegetation
         GetPrefabs();
+        GenerateVegetation();
     }
 
 
@@ -211,9 +213,46 @@ public class TerrainGenerator : MonoBehaviour
         lavender = GM.lavender;
     }
 
+    private void GenerateVegetation()
+    {
+        int i = 0;
+
+        while (i < newVertices.Length)
+        {
+            //onlt take vertices not on the edge
+            if (newVertices[i].x != 0 && newVertices[i].x != 11 && newVertices[i].z != 0 && newVertices[i].z != 11)
+            {
+                biome = CheckBiomeType(newVertices[i].y);
+
+                switch (biome)
+                {
+                    case Biome.Grassy:
+                        SpawnGrassyVeg(newVertices[i]);
+                        break;
+
+                    case Biome.Elevated:
+                        SpawnElevatedVeg(newVertices[i]);
+                        break;
+
+                    case Biome.Mountain:
+                        SpawnMountainVeg(newVertices[i]);
+                        break;
+
+                    default:
+                        break;
+                }
+
+                i++;
+            }
+
+            else
+                i += 3;
+        }
+    }
+
     private void SpawnFlowers(Vector3 position)
     {
-        float num = RndNumGenerator(1, 3);
+        float num = RndNumGenerator(1, 4);
 
         switch(num)
         {
@@ -235,20 +274,24 @@ public class TerrainGenerator : MonoBehaviour
 
     }
     
-    private void SpawnTrees(Vector3 position, Biome biome)
+    private void SpawnTrees(Vector3 position, int num)
     {
-        switch(biome)
+        switch (num)
         {
-            case Biome.Grassy:
-                //spawn no trees
+            case 1:
+                Instantiate(pine, position, Quaternion.identity);
                 break;
 
-            case Biome.Elevated:
-                //spawn any trees
+            case 2:
+                Instantiate(tree1, position, Quaternion.identity);
                 break;
 
-            case Biome.Mountain:
-                //only spawn certain trees
+            case 3:
+                Instantiate(tree2, position, Quaternion.identity);
+                break;
+
+            case 4:
+                Instantiate(trunk, position, Quaternion.identity);
                 break;
 
             default:
@@ -256,37 +299,90 @@ public class TerrainGenerator : MonoBehaviour
         }
     }
 
-    private void SpawnVegetation()
+    private Biome CheckBiomeType(float height)
     {
-        //assign biome type to vertices
-        foreach (Vector3 vertex in newVertices)
-        {
-            if (vertex.y <= 0.4f)
-            {
-                biome = Biome.Grassy;
-                //spawn grassy vegetation
-            } 
-            
-            else if (vertex.y > 0.4f && vertex.y < 0.7f)
-            {
-                biome = Biome.Elevated;
-                //spawn all vegetation
-            }
+        Biome currentBiome = Biome.Grassy;
 
-            else if (vertex.y >= 0.7f)
-            {
-                biome = Biome.Mountain;
-                //spawn mountain vegetation
-            }
+        if (height <= 0.4f)
+            currentBiome = Biome.Grassy;
+
+        else if (height > 0.4f && height < 0.7f)
+            currentBiome = Biome.Elevated;
+
+        else if (height >= 0.7f)
+            currentBiome = Biome.Mountain;
+
+        return currentBiome;
+    }
+
+    private void SpawnGrassyVeg(Vector3 position)
+    {
+        //spawn only flowers
+        float num = RndNumGenerator(1, 7);
+
+        Vector3[,] positions = GeneratePositions(position);
+        for (int i = 0; i < num; i++)
+        {
+            float index1 = RndNumGenerator(0, 16);
+            float index2 = RndNumGenerator(0, 16);
+            SpawnFlowers(positions[(int)index1, (int)index2]);
         }
     }
 
+    private void SpawnElevatedVeg(Vector3 position)
+    {
+        float num = RndNumGenerator(1, 11);
 
+        Vector3[,] positions = GeneratePositions(position);
+        for (int i = 0; i < num; i++)
+        {
+            float index1 = RndNumGenerator(0, 16);
+            float index2 = RndNumGenerator(0, 16);
+            SpawnTrees(positions[(int)index1, (int)index2], 4);
+        }
+    }
+
+    private void SpawnMountainVeg(Vector3 position)
+    {
+        //spawn only trees
+        float num = RndNumGenerator(1, 7);
+
+        Vector3[,] positions = GeneratePositions(position);
+        for (int i = 0; i < num; i++)
+        {
+            float index1 = RndNumGenerator(0, 16);
+            float index2 = RndNumGenerator(0, 16);
+            SpawnTrees(positions[(int)index1, (int)index2], 4);
+        }
+    }
     #endregion
 
     private float RndNumGenerator(int min, int max)
     {
         float random = UnityEngine.Random.Range(min, max);
         return random;
+    }
+
+    private Vector3[,] GeneratePositions(Vector3 position)
+    {
+        Vector3[,] positionArray = new Vector3[4,4];
+
+        float xOffset = -0.5f;
+        float zOffset = -0.5f;
+        float adjustment = 0.25f;
+
+        for (int i = 0; i < positionArray.Length; i++)
+        {
+            for (int j = 0; j < positionArray.Length; j++)
+            {
+                positionArray[i, j] = new Vector3(position.x + xOffset, position.y, position.z + zOffset);
+                zOffset = zOffset + adjustment;
+            }
+
+            zOffset = -0.5f;
+            xOffset = xOffset + adjustment;
+        }
+
+        return positionArray;
     }
 }
