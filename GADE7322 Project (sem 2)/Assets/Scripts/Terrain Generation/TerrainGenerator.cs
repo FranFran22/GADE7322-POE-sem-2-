@@ -84,8 +84,6 @@ public class TerrainGenerator : MonoBehaviour
         GenerateVegetation();
         Debug.Log("Vegetation spawned");
 
-        //Instantiate(tree2, new Vector3(0,0,0), Quaternion.Euler(-90f, 0, 0));
-        //Debug.Log("tree spawned");
     }
 
 
@@ -231,6 +229,8 @@ public class TerrainGenerator : MonoBehaviour
             //onlt take vertices not on the edge
             if (vertices[i].x != -5 && vertices[i].x != 5 && vertices[i].z != -5 && vertices[i].z != 5)
             {
+                Debug.Log(vertices[i]);
+
                 biome = CheckBiomeType(vertices[i].y);
 
                 switch (biome)
@@ -322,10 +322,10 @@ public class TerrainGenerator : MonoBehaviour
     {
         Biome currentBiome = Biome.Grassy;
 
-        if (height <= 0.4f)
+        if (height < 0.1f)
             currentBiome = Biome.Grassy;
 
-        else if (height > 0.4f && height < 0.7f)
+        else if (height > 0 && height < 0.7f)
             currentBiome = Biome.Elevated;
 
         else if (height >= 0.7f)
@@ -357,53 +357,51 @@ public class TerrainGenerator : MonoBehaviour
         switch (formation)
         {
             case 1:
-                num = RndNumGenerator(1, 11);
+                num = RndNumGenerator(1, 5);
 
                 for (int i = 0; i < num; i++)
                 {
                     float index1 = RndNumGenerator(0, 4);
                     float index2 = RndNumGenerator(0, 4);
 
-                    SpawnTrees(positions[(int)index1, (int)index2], 3);
-                    SpawnTrees(positions[(int)index1 -1, (int)index2], 2);
-                    SpawnFlowers(positions[(int)index1, (int)index2 + 1]);
-                    SpawnFlowers(positions[(int)index1 + 1, (int)index2 + 1]);
-                    SpawnFlowers(positions[(int)index1 +1, (int)index2]);
+                    Vector3 pos = positions[(int)index1, (int)index2];
+
+                    SpawnFlowers(pos);
+                    SpawnFlowers(new Vector3(pos.x + 0.25f, pos.y, pos.z));
+                    SpawnFlowers(new Vector3(pos.x, pos.y, pos.z + 0.25f));
                 }
 
                 break;
 
             case 2:
-                num = RndNumGenerator(1, 11);
+                num = RndNumGenerator(1, 5);
 
                 for (int i = 0; i < num; i++)
                 {
                     float index1 = RndNumGenerator(0, 4);
                     float index2 = RndNumGenerator(0, 4);
 
-                    SpawnTrees(positions[(int)index1, (int)index2], 2);
-                    SpawnTrees(positions[(int)index1 + 1, (int)index2], 1);
-                    SpawnTrees(positions[(int)index1, (int)index2 + 1], 2);
-                    SpawnFlowers(positions[(int)index1 + 1, (int)index2 + 1]);
-                    SpawnFlowers(positions[(int)index1 + 2, (int)index2]);
-                    SpawnFlowers(positions[(int)index1 + 2, (int)index2 + 1]);
+                    Vector3 pos = positions[(int)index1, (int)index2];
+
+                    SpawnTrees(pos, 3);
+                    SpawnTrees(new Vector3(pos.x + 0.25f, pos.y, pos.z), 1);
+                    SpawnFlowers(new Vector3(pos.x, pos.y, pos.z + 0.25f));
                 }
                 break;
 
             case 3:
-                num = RndNumGenerator(1, 11);
+                num = RndNumGenerator(1, 5);
 
                 for (int i = 0; i < num; i++)
                 {
                     float index1 = RndNumGenerator(0, 4);
                     float index2 = RndNumGenerator(0, 4);
 
-                    SpawnTrees(positions[(int)index1, (int)index2], 4);
-                    SpawnTrees(positions[(int)index1 + 1, (int)index2], 2);
-                    SpawnFlowers(positions[(int)index1, (int)index2 + 1]);
-                    SpawnFlowers(positions[(int)index1 + 1, (int)index2 + 1]);
-                    SpawnFlowers(positions[(int)index1 + 2, (int)index2]);
-                    SpawnFlowers(positions[(int)index1 + 2, (int)index2 + 1]);
+                    Vector3 pos = positions[(int)index1, (int)index2];
+
+                    SpawnTrees(pos, 2);
+                    SpawnFlowers(new Vector3(pos.x + 0.25f, pos.y, pos.z));
+                    SpawnFlowers(new Vector3(pos.x, pos.y, pos.z + 0.25f));
                 }
                 break;
 
@@ -421,8 +419,8 @@ public class TerrainGenerator : MonoBehaviour
         Vector3[,] positions = GeneratePositions(position);
         for (int i = 0; i < num; i++)
         {
-            float index1 = RndNumGenerator(0, 16);
-            float index2 = RndNumGenerator(0, 16);
+            float index1 = RndNumGenerator(0, 4);
+            float index2 = RndNumGenerator(0, 4);
             SpawnTrees(positions[(int)index1, (int)index2], 4);
         }
     }

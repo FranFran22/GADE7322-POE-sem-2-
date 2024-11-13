@@ -32,8 +32,11 @@ public class GameManager : MonoBehaviour
     public GameObject[] vertexArray;
     private GameObject[] enemySpawnPoints;
     public List<GameObject>[] paths = new List<GameObject>[3];
-    public GameObject tower;
 
+    [Header("Tower Assets")]
+    public GameObject tower;
+    public GameObject towerUpgrade1;
+    public GameObject towerUpgrade2;
 
     [Header("Vegetation Assets")]
     public GameObject treeTrunk;
@@ -58,6 +61,7 @@ public class GameManager : MonoBehaviour
     public bool towerPlaced;
     private float timer;
     private float timeDuration = 0;
+    public int towerLevel;
 
     [SerializeField]
     public bool canSpawn;
@@ -124,6 +128,8 @@ public class GameManager : MonoBehaviour
 
         LevelGeneration LG = gameObject.GetComponent<LevelGeneration>();
         enemySpawnPoints = LevelGeneration.enemySpawns;
+
+        towerLevel = 1;
     }
 
 
@@ -151,6 +157,9 @@ public class GameManager : MonoBehaviour
                 gameOver = true;
                 GameOverCanvas.SetActive(true);
             }
+
+            //check tower level
+            //towerLevel = CheckTowerLevel();
         }
     }
 
@@ -462,4 +471,66 @@ public class GameManager : MonoBehaviour
             //Debug.Log("Changed difficulty to: Difficult");
         }
     }
+
+    #region UNIT UPGRADES
+
+    public void UpgradeTower()
+    {
+
+        switch (towerLevel)
+        {
+            case 1:
+                //store health & delete old tower
+                TowerController firstTC = tower.GetComponent<TowerController>();
+                Destroy(tower);
+
+                //instantiate new tower & transfer info
+                tower = Instantiate(towerUpgrade1, new Vector3(10, 0.2f, 10), Quaternion.identity);
+                TowerController TC = tower.GetComponent<TowerController>();
+                TC.currentHealth = firstTC.currentHealth;
+                TC.maxHealth = 600;
+
+                towerLevel = 2;
+                break;
+
+            case 2:
+                //store health & delete old upgraded tower
+                firstTC = tower.GetComponent<TowerController>();
+                Destroy(tower);
+
+                //instantiate new tower & transfer info
+                tower = Instantiate(towerUpgrade2, new Vector3(10, 0.2f, 10), Quaternion.identity);
+                TC = tower.GetComponent<TowerController>();
+                TC.currentHealth = firstTC.currentHealth;
+                TC.maxHealth = 700;
+
+                towerLevel = 3;
+                break;
+
+            case 3:
+                //no more upgrades
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private int CheckTowerLevel()
+    {
+        GameObject standardTower = GameObject.Find("Tower Prefab");
+        GameObject upgrade1 = GameObject.Find("Upgrade 1");
+        GameObject upgrade2 = GameObject.Find("Upgrade 2");
+
+        if (upgrade1 != null)
+            return 2;
+
+        else if (upgrade2 != null)
+            return 3;
+
+        else
+            return 1;
+    }
+
+    #endregion
 }

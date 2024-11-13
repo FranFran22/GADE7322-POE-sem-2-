@@ -37,6 +37,7 @@ public class TowerController : MonoBehaviour
 
     void Update()
     {
+        healthBar.maxHealth = maxHealth;
         currentHealth = healthBar.currentHealth;
         CheckForEnemies();
 

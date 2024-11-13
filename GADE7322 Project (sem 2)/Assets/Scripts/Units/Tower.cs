@@ -7,7 +7,7 @@ public class Tower : Unit
 
     public Tower(GameObject pref)
     {
-        health = 800;
+        health = 500;
         damage = 25;
         speed = 0f;
         prefab = pref;
